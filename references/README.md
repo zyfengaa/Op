@@ -12,10 +12,19 @@
 
 ## Triton
 
+先读课程里的手算与 CUDA baseline，再读下列对应官方实现，并带着一个明确问题阅读：
+
+- [Fused Softmax](https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html)：找到行宽补齐、load mask、max/sum 与输出 store 的关系。
+- [LayerNorm](https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html)：区分前向统计和反向参数梯度的数据流。
+- [Matrix Multiplication](https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html)：把指针矩阵与课程四线程 tile 装载表对应起来。
+- [Fused Attention](https://triton-lang.org/main/getting-started/tutorials/06-fused-attention.html)：追踪每轮 m/l/acc 如何重缩放，查看 mask 和 dtype 转换。
+
 - [Tutorial gallery](https://triton-lang.org/main/getting-started/tutorials/)：Vector Add、Softmax、Matmul、LayerNorm、Attention。
 - 阅读时记录 Triton 版本和 GPU 型号；API 和最佳配置会演进。
 
 ## Profiling
+
+先完成 [本仓库测量实验](../02-perf-aware-ops/benchmark-and-profiling.md)，再按问题查工具手册；不要一次复制全部指标名。
 
 - [Nsight Systems](https://docs.nvidia.com/nsight-systems/)：全局时间线、CPU/GPU 排队、kernel 选择。
 - [Nsight Compute](https://docs.nvidia.com/nsight-compute/)：单 kernel 指标。

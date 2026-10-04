@@ -1,6 +1,6 @@
 # Vector Add 精讲：第一次把 CPU 循环搬到 GPU
 
-本篇对应 [vector_add.cu](vector_add.cu) 和 [vector_add_triton.py](vector_add_triton.py)。请先运行无 GPU 的 [elementwise_lab.py](../../examples/cpu/elementwise_lab.py)，再进入 CUDA 代码。若链接相对路径不正确，课程入口仍可从仓库根目录 examples/cpu 查找。
+本篇对应 [vector_add.cu](vector_add.cu) 和 [vector_add_triton.py](vector_add_triton.py)。请先运行无 GPU 的 [elementwise_lab.py](../../examples/cpu/elementwise_lab.py)，再进入 CUDA 代码。
 
 ## 1. 从一组具体输入开始
 
@@ -139,6 +139,36 @@ FP32 版本每个元素读 A 的 4 字节、读 B 的 4 字节、写 C 的 4 字
 ## 10. 本章通过标准
 
 你能手算任意 N 的 grid/tail，解释 host→device→host 的完整路径，指出 kernel-only 与 E2E 的测量边界，并给出至少两个会造成错误的反例。
+
+## 11. 数组长度、元素索引与字节数要明确区分
+
+n 是元素数量，cudaMalloc/cudaMemcpy 的大小是字节数量。若 n=5、元素为 float，分配应为 5*sizeof(float)=20 字节。在 C++ 中 a[i] 已经按 float 的大小进行指针寻址，不能再写 a[i*4] 来表示第 i 个 float。
+
+size_t bytes=static_cast<size_t>(n)*sizeof(float) 先把乘法提升到合适的尺寸类型，避免只在较窄整数里计算字节数。处理很大的张量时，kernel 的索引类型和乘积同样要检查；本教学例的固定 n 不覆盖所有超大尺寸。
+
+d_a 是设备分配返回的地址，a.data() 是宿主 std::vector 的地址。把宿主普通指针误传给只能读设备内存的 kernel，可能触发非法访问。统一内存或其他可访问内存机制有自己的规则，不能把它们与这段显式拷贝教学代码混用。
+
+## 12. 一线程一个元素与 grid-stride 循环
+
+当前 kernel 让每个有效线程只处理一个 i。当你希望控制 block 数而仍覆盖大 N，可以改成：
+
+~~~cpp
+for (size_t i = blockIdx.x * size_t(blockDim.x) + threadIdx.x;
+     i < n;
+     i += size_t(blockDim.x) * gridDim.x) {
+  c[i] = a[i] + b[i];
+}
+~~~
+
+假设 grid=2、block=4，共八个逻辑线程，N=19。全局线程 0 处理 0、8、16；线程 1 处理 1、9、17；线程 2 处理 2、10、18；其他线程处理各自剩余位置。步长是整个 grid 的线程数，不是只有 blockDim。
+
+它仍保证每个 i 有唯一负责线程，但改变了每线程工作量。是否更快需要实际测试；优点首先是工作量与发射线程数可独立选择。不要把这一循环中的 grid 步长误搬到“一个 block 处理一行”的 row kernel，那里的列步长是 blockDim。
+
+## 13. 为什么不能只用全相同输入做测试
+
+若所有 A[i]=1.25、B[i]=-0.5，那么读错相邻位置也仍会得到 0.75。这样的测试能发现部分缺写或非法值，却很难发现输入索引置换。
+
+CUDA 样例现在用随 i 变化的周期输入，并逐位置比较 A[i]+B[i]，错误会输出具体 i、actual、expected。下一步可加非重复递增值、小长度和随机 seed；每一种输入都应针对不同的错误模式。测试本身也应先拒绝不应出现的 NaN/Inf。
 
 ## 参考资料
 

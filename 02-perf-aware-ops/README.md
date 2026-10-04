@@ -7,6 +7,7 @@
 - [Softmax](01-softmax/README.md)：稳定公式、分阶段 reduction、融合和 online 算法。
 - [LayerNorm](02-layernorm/README.md)：均值/方差、数值误差、行归约和融合。
 - [GEMM](03-gemm/README.md)：M/N/K、naive → tiling → vectorized load → benchmark。
+- [性能测量实战](benchmark-and-profiling.md)：CUDA events、计时范围、Roofline、Nsight 与失败假设分析。
 
 ## 每个优化版本必须留下
 

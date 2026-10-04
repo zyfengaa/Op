@@ -60,4 +60,4 @@ PR/提交至少包含规格、reference、实现、边界测试、运行说明�
 1. [PyTorch Custom C++ and CUDA Operators](https://docs.pytorch.org/tutorials/advanced/cpp_custom_ops.html)：注册、测试与框架集成。
 2. [CUDA Best Practices Guide](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html)：验证与测量。
 3. [Compute Sanitizer](https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html)：越界和竞争排查。
-4. [CMake CUDA Language](https://cmake.org/cmake/help/latest/manual/cmake-cuda.7.html)：构建边界。
+4. [CMake CUDA_ARCHITECTURES](https://cmake.org/cmake/help/latest/prop_tgt/CUDA_ARCHITECTURES.html)：目标架构与构建边界。

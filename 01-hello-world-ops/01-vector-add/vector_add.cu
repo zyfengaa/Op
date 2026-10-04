@@ -28,7 +28,11 @@ __global__ void vector_add_kernel(const float* a, const float* b, float* c, int 
 int main() {
   constexpr int n = 100003;  // intentionally not divisible by block size
   const size_t bytes = static_cast<size_t>(n) * sizeof(float);
-  std::vector<float> a(n, 1.25f), b(n, -0.5f), c(n, 0.0f);
+  std::vector<float> a(n), b(n), c(n, 0.0f);
+  for (int i = 0; i < n; ++i) {
+    a[i] = static_cast<float>(i % 97 - 48) * 0.25f;
+    b[i] = static_cast<float>(i % 31 - 15) * 0.5f;
+  }
   float *d_a = nullptr, *d_b = nullptr, *d_c = nullptr;
 
   CUDA_CHECK(cudaMalloc(&d_a, bytes));
@@ -44,9 +48,11 @@ int main() {
   CUDA_CHECK(cudaDeviceSynchronize());
   CUDA_CHECK(cudaMemcpy(c.data(), d_c, bytes, cudaMemcpyDeviceToHost));
 
-  for (float value : c) {
-    if (std::abs(value - 0.75f) > 1e-6f) {
-      std::cerr << "vector add correctness: FAIL\n";
+  for (int i = 0; i < n; ++i) {
+    const float expected = a[i] + b[i];
+    if (!std::isfinite(c[i]) || std::abs(c[i] - expected) > 1e-6f) {
+      std::cerr << "vector add correctness: FAIL at " << i
+                << " got=" << c[i] << " expected=" << expected << '\n';
       return EXIT_FAILURE;
     }
   }

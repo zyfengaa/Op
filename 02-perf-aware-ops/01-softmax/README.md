@@ -44,7 +44,7 @@ yᵢ = exp(xᵢ - m) / Σⱼ exp(xⱼ - m)
 ## 常见错误
 
 - 忘记减 max。
-- max 的无效 lane 用 0 填充，导致全负数输入出错。
+- max 的无效 lane 用 0 填充，失去稳定性保证；如极负输入会因指数下溢而失败，详见 walkthrough 的反例。
 - sum 阶段把 padding lane 的贡献错误计入。
 - 要求低精度结果与 FP32 reference bitwise 相等。
 

@@ -64,7 +64,7 @@ int main() {
 
   float actual = 0.0f;
   CUDA_CHECK(cudaMemcpy(&actual, d_output, sizeof(float), cudaMemcpyDeviceToHost));
-  if (std::abs(actual - reference) > 1e-3f) {
+  if (!std::isfinite(actual) || std::abs(actual - reference) > 1e-3f) {
     std::cerr << "block reduction correctness: FAIL: " << actual
               << " vs " << reference << '\n';
     return EXIT_FAILURE;

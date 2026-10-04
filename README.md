@@ -17,6 +17,14 @@
 
 ## 新人从这里开始
 
+各阶段 README 用作导航，walkthrough 是正文。正文把具体输入、线程/地址映射、代码片段、中间状态、失败反例和验收练习放在同一条路径中。可从下列章节检查讲解深度：
+
+- [Softmax：逐线程归约、共享存储复用、online 推导与 CUDA 实现](02-perf-aware-ops/01-softmax/walkthrough.md)。
+- [LayerNorm：统计轴、Welford 更新/合并、误差与梯度数据流](02-perf-aware-ops/02-layernorm/walkthrough.md)。
+- [GEMM：四线程装载表、K 尾块、两次同步、复用与资源账](02-perf-aware-ops/03-gemm/walkthrough.md)。
+- [性能测量：计时范围、Roofline、工具命令与证据分析](02-perf-aware-ops/benchmark-and-profiling.md)。
+- [框架生命周期：fake、广播梯度和可运行注册实验](00-foundations/framework-op-lifecycle.md)。
+
 1. 阅读 [基础执行模型](00-foundations/computer-architecture.md) 和 [内存层级](00-foundations/memory-hierarchy.md)。
 2. 完成 [Vector Add 教程](01-hello-world-ops/01-vector-add/README.md)，编译运行 CUDA 示例。
 3. 学习 [Elementwise Activation](01-hello-world-ops/02-elementwise-activation/README.md) 和 [Reduction](01-hello-world-ops/03-reduction-sum-max/README.md)。
@@ -49,6 +57,7 @@ python examples/cpu/reduction_lab.py
 python examples/cpu/softmax_lab.py
 python examples/cpu/layernorm_lab.py
 python examples/cpu/gemm_lab.py
+python examples/cpu/dataflow_lab.py
 python -m unittest discover -s examples/cpu
 ~~~
 
@@ -75,9 +84,22 @@ CUDA 程序：
 .\build\cuda\Release\block_reduce_sum.exe
 .\build\cuda\Release\naive_gemm.exe
 .\build\cuda\Release\tiled_gemm.exe
+.\build\cuda\Release\row_ops.exe
+.\build\cuda\Release\row_ops.exe --benchmark
+ctest --test-dir build/cuda -C Release --output-on-failure
 ~~~
 
-Linux/macOS 通常在 build/cuda/ 下运行同名程序。Triton 示例位于 Vector Add 课程目录，需要按 Triton 当前安装指南准备 Python/GPU 环境。
+Linux 单配置生成器通常在 build/cuda/ 下生成同名程序。Triton 示例位于 Vector Add 课程目录，需要按 Triton 当前安装指南准备 Python/GPU 环境。
+
+## PyTorch 框架接入实验
+
+已安装兼容 PyTorch 时，还可在 CPU 运行框架接入实验：
+
+~~~powershell
+python examples/pytorch/custom_bias_relu.py
+~~~
+
+实验说明与各后端验证状态见 [examples 索引](examples/README.md)。
 
 ## AI 辅助的学习方法
 

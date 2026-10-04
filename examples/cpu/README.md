@@ -12,6 +12,7 @@ python examples/cpu/softmax_lab.py
 python examples/cpu/layernorm_lab.py
 python examples/cpu/gemm_lab.py
 python examples/cpu/advanced_lab.py
+python examples/cpu/dataflow_lab.py
 python -m unittest discover -s examples/cpu
 ~~~
 
@@ -26,5 +27,8 @@ python -m unittest discover -s examples/cpu
 | layernorm_lab.py | 02 LayerNorm | 均值、方差、常量行 |
 | gemm_lab.py | 02 GEMM | 非整除 tile、A/B 复用 |
 | advanced_lab.py | 03 进阶算子 | Attention、Conv2D、bias+ReLU 的简化 reference |
+| dataflow_lab.py | 02/03 数据流 | 线程局部统计、Welford、GEMM tile、online Attention、im2col |
+
+只跟踪一个主题可运行 `python examples/cpu/dataflow_lab.py --topic gemm`；可选主题为 softmax、welford、gemm、attention、conv。输出中保留每个阶段的中间量，便于和正文逐项核对。
 
 每个脚本先读公式，再手算小输入，最后运行并核对输出。请把观察写进实验日志，不要只看 PASS。进阶案例只是简化语义 reference，不是 GPU 高性能实现。

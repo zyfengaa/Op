@@ -92,7 +92,7 @@ int main() {
 
   const auto expected = cpu_gemm(a, b, m, n, k);
   for (size_t i = 0; i < c.size(); ++i) {
-    if (std::abs(c[i] - expected[i]) > 1e-4f) {
+    if (!std::isfinite(c[i]) || std::abs(c[i] - expected[i]) > 1e-4f) {
       std::cerr << "tiled GEMM correctness: FAIL at " << i << '\n';
       return EXIT_FAILURE;
     }

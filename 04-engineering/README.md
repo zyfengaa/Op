@@ -7,6 +7,7 @@
 - [接口和分层设计](interface-study/README.md)
 - [测试框架](test-framework/README.md)
 - [CI 与交付模板](ci-template/README.md)
+- [可运行 PyTorch 接入实验](../examples/pytorch/custom_bias_relu.py)：forward、fake、autograd、opcheck 和图捕获。
 
 ## 工程目标
 

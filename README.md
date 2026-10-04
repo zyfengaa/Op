@@ -38,6 +38,20 @@ examples/                        可运行脚本及构建入口
 archive-legacy-docs/              旧版摘要材料，保留供查阅，不作为课程入口
 ~~~
 
+## 无 GPU 也能开始的实验
+
+[CPU 教学实验索引](examples/cpu/README.md) 包含线程索引模拟、逐元素、归约、Softmax、LayerNorm 和 GEMM。先手算示例，再执行脚本并做边界测试；这些程序验证算法，不模拟 GPU 速度。
+
+~~~powershell
+python examples/cpu/indexing_lab.py
+python examples/cpu/elementwise_lab.py
+python examples/cpu/reduction_lab.py
+python examples/cpu/softmax_lab.py
+python examples/cpu/layernorm_lab.py
+python examples/cpu/gemm_lab.py
+python -m unittest discover -s examples/cpu
+~~~
+
 ## 案例运行
 
 标准 Python 示例不需要第三方库：

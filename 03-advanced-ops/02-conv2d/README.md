@@ -1,5 +1,7 @@
 # Conv2D：算法变换和数据布局权衡
 
+先读 [Conv2D 逐步实验](walkthrough.md)，先手算窗口与地址，再比较直接卷积和 im2col。
+
 ## 语义先写清楚
 
 定义 NCHW/NHWC、stride、padding、dilation、groups、bias 和输出 shape。卷积框架常采用互相关定义，即 filter 不翻转；测试必须与目标框架约定一致。

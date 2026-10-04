@@ -1,5 +1,7 @@
 # FlashAttention：把前面学过的内容组合起来
 
+先读 [Attention 逐步实验](walkthrough.md)，从两 token 手算和 CPU reference 进入 online m/l/o 合并。
+
 ## 为什么它是进阶项目
 
 Attention 将矩阵乘法、softmax、数据分块、数值稳定、融合、寄存器/shared-memory 规划和流水线组合在一起。若还不理解 Reduce、Softmax 和 GEMM tile，直接读生产实现会被大量细节淹没。

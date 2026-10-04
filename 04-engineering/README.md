@@ -1,5 +1,7 @@
 # 04 · 工程化：从 kernel 到可维护算子
 
+先读 [完整算子交付案例](end-to-end-project.md)：以 LayerNorm 为例串起接口、reference、边界测试、性能记录与提交审查。
+
 ## 课程
 
 - [接口和分层设计](interface-study/README.md)

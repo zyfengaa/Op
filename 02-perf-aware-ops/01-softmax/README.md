@@ -1,5 +1,7 @@
 # Softmax：Reduction、数值稳定和融合
 
+先读 [Softmax 完整推导](walkthrough.md)：真实数字、online 合并公式、mask 边界和实验步骤。
+
 ## 定义
 
 对一行输入 x，yᵢ = exp(xᵢ) / Σⱼ exp(xⱼ)。每个输出依赖整行，因此不是普通逐元素 kernel。

@@ -2,6 +2,8 @@
 
 先完成通用路线，再根据明确硬件选择专精方向。
 
+先读 [平台迁移实操](migration-lab.md)，看 Vector Add 如何保留公共语义、重做设备映射。
+
 ## 共同能力
 
 跨平台可迁移：数学语义、shape/stride 契约、CPU reference、误差验证、并行分解、tiling 思路、Roofline 推理、benchmark 设计和假设验证。

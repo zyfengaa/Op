@@ -1,5 +1,7 @@
 # Elementwise Activation：ReLU、Sigmoid、GELU
 
+先读 [逐元素激活完整案例](walkthrough.md)，其中有手算、稳定 Sigmoid、可运行实验、融合流量估算和练习答案。
+
 ## 本节目标
 
 从 Vector Add 迁移到逐元素数学函数，学会验证边界、dtype、NaN/Inf 和融合的收益。

@@ -1,5 +1,7 @@
 # Vector Add：你的第一个 GPU Kernel
 
+第一次学习请先读 [完整逐步教程](walkthrough.md)，再把本文件当作复习提纲。
+
 ## 目标与问题定义
 
 给两个长度为 N 的 FP32 向量 A、B，计算 C：

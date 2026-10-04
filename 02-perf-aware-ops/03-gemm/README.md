@@ -1,5 +1,7 @@
 # GEMM：从 baseline 到瓶颈分析
 
+先读 [GEMM 完整案例](walkthrough.md)：从具体矩阵乘积到 tile 复用、边界、性能证据。
+
 ## 问题
 
 C[M,N] = A[M,K] × B[K,N]，计算量约为 2MNK。接口必须声明 A/B/C 的 shape、dtype、layout、stride 和累加类型。

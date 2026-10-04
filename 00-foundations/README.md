@@ -4,6 +4,8 @@
 
 ## 学习顺序
 
+先从 [基础精讲与手算练习](handbook.md) 开始。下列文档可在遇到术语时按主题查阅。
+
 1. [CPU、GPU 与执行模型](computer-architecture.md)
 2. [内存层级与数据移动](memory-hierarchy.md)
 3. [算子在框架中的生命周期](framework-op-lifecycle.md)

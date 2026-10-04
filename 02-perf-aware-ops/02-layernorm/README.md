@@ -1,5 +1,7 @@
 # LayerNorm：组合 Reduction 与 Elementwise
 
+先读 [LayerNorm 完整案例](walkthrough.md)：两遍统计的手算、数值稳定、GPU 映射、测试和答案。
+
 ## 定义和契约
 
 对最后一维长度 D 的每行：

@@ -1,5 +1,7 @@
 # Reduction：Sum 和 Max
 
+请先读 [完整手算与代码讲解](walkthrough.md)。本页保留阶段路线和验收要点。
+
 ## 为什么它是第一个分水岭
 
 Vector Add 中每个输出独立；Reduce 的输出依赖多个输入。线程先算局部 partial，再进行线程间合并，因此出现同步、竞争、atomic 和浮点加法顺序问题。

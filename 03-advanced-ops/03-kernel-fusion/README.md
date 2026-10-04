@@ -1,5 +1,7 @@
 # Kernel Fusion：什么时候值得融合
 
+先读 [Fusion 逐步实验](walkthrough.md)，以 bias+ReLU 为例检查结果、字节数和测量设计。
+
 ## 融合解决什么问题
 
 对 A→B 两个逐元素阶段，分开的实现可能写出中间 tensor，再由第二个 kernel 读回。融合可减少 launch 和中间结果流量：

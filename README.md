@@ -26,6 +26,7 @@ Profiling
 - [模拟指标计算脚本](examples/simulate_gemm_analysis.py)：只依赖 Python 标准库，计算 FLOPs、权重大小、算术强度、Roofline 分界点和阶段收益。
 - [最小 GEMM 学习程序](examples/gemm_learning_demo.py)：只依赖 Python 标准库，演示 naive 与 tiled GEMM 的数学等价性、边界处理和结果校验。
 - [CUDA 示例](examples/cuda/)：包含可编译的 Vector Add、naive GEMM 和 CMake 构建入口。
+- [新人主教材](docs/beginner_course.md)：从 C/C++、GPU 执行模型、Vector Add 一直讲到 GEMM、Tensor Core、Profiler、框架集成和完整项目。
 
 完整章节顺序：
 

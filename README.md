@@ -1,61 +1,81 @@
-﻿# Op：面向性能分析的算子开发
+# Op 算子开发学习仓
 
-这个仓库不以“手写很多 Kernel”为目标，而是训练一条可以复用的算子性能工程闭环：
+这是一套面向有普通开发经验、但没有系统做过 GPU/NPU 算子开发的课程。学习目标是能解释正确性、性能和硬件行为，并能审查 AI 生成的实现。
 
-```text
-Profiling
-  → 定位 Top Kernel
-  → 映射模型结构
-  → 分析 M/N/K、dtype、layout
-  → 计算 FLOPs、访存量和算术强度
-  → Roofline 定性
-  → 建立指标到根因的证据链
-  → 提出优化假设
-  → 实现 / 让 AI 辅助实现
-  → 正确性验证
-  → Micro Benchmark
-  → Profiler 复核
-  → E2E Benchmark
-```
+课程采用阶段门槛：先学习通用概念，再以 CUDA 为第一个可运行后端，后续学习 Triton、Attention 和平台迁移。阶段周期仅作参考，以验收清单为准。
 
-## 当前内容
+## 课程主线
 
-- [从零开始的学习路线](docs/00_learning_path.md)：面向没有算子开发经验的开发人员，解释每个阶段要学什么、做什么实验、交付什么结果。
-- [GEMM 优化阶梯实验](docs/02_gemm_optimization_ladder.md)：从 naive GEMM 逐步走到 coalescing、tiling、shared memory、register tiling、Tensor Core 和 pipeline。
-- [Decode 小 M GEMM 性能分析](docs/01_decode_gemm_performance_analysis.md)：完整模拟一次 vLLM Decode 场景，解释为什么不能看到 Tensor Core 利用率低就直接优化 Tensor Core。
-- [模拟指标计算脚本](examples/simulate_gemm_analysis.py)：只依赖 Python 标准库，计算 FLOPs、权重大小、算术强度、Roofline 分界点和阶段收益。
-- [最小 GEMM 学习程序](examples/gemm_learning_demo.py)：只依赖 Python 标准库，演示 naive 与 tiled GEMM 的数学等价性、边界处理和结果校验。
-- [CUDA 示例](examples/cuda/)：包含可编译的 Vector Add、naive GEMM 和 CMake 构建入口。
-- [新人主教材](docs/beginner_course.md)：从 C/C++、GPU 执行模型、Vector Add 一直讲到 GEMM、Tensor Core、Profiler、框架集成和完整项目。
+| 阶段 | 目录 | 学习内容 | 阶段产出 |
+|---|---|---|---|
+| 00 基础 | [00-foundations](00-foundations/README.md) | CPU/GPU、SIMT、内存层级、框架算子生命周期 | 能推导地址并解释 launch 和带宽 |
+| 01 Hello World | [01-hello-world-ops](01-hello-world-ops/README.md) | Vector Add、Activation、Reduction | reference、kernel、边界测试、baseline |
+| 02 性能意识 | [02-perf-aware-ops](02-perf-aware-ops/README.md) | Softmax、LayerNorm、GEMM、Roofline | profiling 证据链和优化实验 |
+| 03 进阶算子 | [03-advanced-ops](03-advanced-ops/README.md) | FlashAttention、Conv2D、Fusion | 组合算法、数据流和硬件映射 |
+| 04 工程化 | [04-engineering](04-engineering/README.md) | 接口、测试、CI、复现 | 可维护、可集成、可回归的算子 |
+| 05 平台专精 | [05-platform-specialization](05-platform-specialization/README.md) | CUDA/Triton/国产后端迁移 | 保留公共语义，重做平台实现 |
 
-完整章节顺序：
+## 新人从这里开始
 
-`00 学习路线` → `01 Decode 性能分析` → `02 GEMM 优化阶梯` → `03 索引与逐元素算子` → `04 Reduce/Softmax` → `05 Transpose/访存` → `06 CUDA GEMM Baseline` → `07 Tensor Core/Pipeline` → `08 框架集成` → `09 Benchmark/Profiler` → `10 完整项目实战`
+1. 阅读 [基础执行模型](00-foundations/computer-architecture.md) 和 [内存层级](00-foundations/memory-hierarchy.md)。
+2. 完成 [Vector Add 教程](01-hello-world-ops/01-vector-add/README.md)，编译运行 CUDA 示例。
+3. 学习 [Elementwise Activation](01-hello-world-ops/02-elementwise-activation/README.md) 和 [Reduction](01-hello-world-ops/03-reduction-sum-max/README.md)。
+4. 进入 [Softmax、LayerNorm 和 GEMM](02-perf-aware-ops/README.md)。
+5. 用 [阶段验收清单](checklist/stage-gates.md) 判断是否进入下一阶段。
 
-运行示例：
+## 目录说明
 
-```powershell
-python examples/simulate_gemm_analysis.py
+~~~text
+00-foundations/                  概念地基和自测
+01-hello-world-ops/              第一个平台上的基础算子
+02-perf-aware-ops/               性能感知案例和 GEMM 版本阶梯
+03-advanced-ops/                 Attention、卷积、融合
+04-engineering/                  接口、测试和 CI
+05-platform-specialization/      后端专精和迁移
+checklist/                       阶段门槛、AI 和实验记录模板
+references/                      官方文档、论文和 profiler 模板
+examples/                        可运行脚本及构建入口
+archive-legacy-docs/              旧版摘要材料，保留供查阅，不作为课程入口
+~~~
+
+## 案例运行
+
+标准 Python 示例不需要第三方库：
+
+~~~powershell
 python examples/gemm_learning_demo.py
-```
+python examples/simulate_gemm_analysis.py
+~~~
 
-有 CUDA Toolkit 时：
+CUDA 示例需要兼容的 NVIDIA GPU、CUDA Toolkit 和 CMake：
 
-```powershell
+~~~powershell
 cmake -S examples/cuda -B build/cuda
 cmake --build build/cuda --config Release
+~~~
+
+CUDA 程序：
+
+~~~powershell
 .\build\cuda\Release\vector_add.exe
+.\build\cuda\Release\block_reduce_sum.exe
 .\build\cuda\Release\naive_gemm.exe
-```
+.\build\cuda\Release\tiled_gemm.exe
+~~~
 
-Linux/macOS 路径通常为 `build/cuda/vector_add` 和 `build/cuda/naive_gemm`。没有 CUDA 环境时，仍可运行 Python 学习程序和阅读每章的验证方法；不能把未编译的 CUDA 示例当成已在当前机器实测。
+Linux/macOS 通常在 build/cuda/ 下运行同名程序。Triton 示例位于 Vector Add 课程目录，需要按 Triton 当前安装指南准备 Python/GPU 环境。
 
-## 重要边界
+## AI 辅助的学习方法
 
-文档中的 `320 us`、`82 us`、`1.5 TB/s`、`72%` 等数据是教学用模拟输入，不代表某个具体 GPU、模型或真实测量结果。迁移到真实项目时，必须记录：模型版本、batch/token shape、dtype、量化方式、硬件型号、驱动/编译器、Kernel 配置、采样次数和端到端测量方法。
+AI 可加快样板代码、改写和测试草稿；学习者仍需检查索引、mask、同步、dtype、数值边界和设备假设，并亲自测量性能。使用 [AI 审查清单](checklist/ai-usage-policy.md)，在 [实验记录](checklist/experiment-log-template.md) 中留下假设和证据。不要把 AI 写出的性能数字当成实测。
 
-## 学习原则
+## 证据和限制
 
-每个实验都必须完成四件事：先写清数学定义和输入输出，再实现一个最小版本；用 reference 和误差标准验证正确性；最后记录性能、硬件指标和“指标 → 根因 → 修改”的证据链。
+- 课程中的模拟数据都应明确标注为模拟，不代表具体硬件成绩。
+- CUDA 示例源代码和 CMake 入口已提供；实际编译需在有 CUDA Toolkit 的设备上完成。
+- Triton 教学代码按官方接口编写，需在本机兼容版本和 GPU 上验证。
+- 国产加速卡的 API、工具和约束随 SDK/设备变化；以厂商对应版本的官方资料为准。
 
-CUDA 是训练场，不是能力边界。学会的应当是算子语义、并行算法、数据布局、硬件映射、性能分析和工程验证；CUDA、Triton、AscendC 或其他后端只是不同的实现层。
+## 参考资料入口
+
+按主题查看 [references 索引](references/README.md)：CUDA、Triton、Nsight、PyTorch、CUTLASS 和进阶论文。每个章节也附有适用于该章的资料。

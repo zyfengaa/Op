@@ -299,3 +299,10 @@ M=1
 ```
 
 AI 可以快速生成多个 Kernel 版本，但不能替你决定“为什么此时应该优化 vector load，而不是 Tensor Core、L2 或 K tile”。这个判断，以及最后用数据证明判断，是算子开发在 AI 时代仍然最有价值的能力。
+
+## 本章参考资料
+
+- [CUDA C++ Best Practices：Coalesced Access](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory)
+- [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/)
+- [Nsight Compute Compute Triage Guide](https://docs.nvidia.com/nsight-compute/ComputeTriage/)
+- [Nsight Compute Profiling Guide](https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html)

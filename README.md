@@ -25,6 +25,11 @@ Profiling
 - [Decode 小 M GEMM 性能分析](docs/01_decode_gemm_performance_analysis.md)：完整模拟一次 vLLM Decode 场景，解释为什么不能看到 Tensor Core 利用率低就直接优化 Tensor Core。
 - [模拟指标计算脚本](examples/simulate_gemm_analysis.py)：只依赖 Python 标准库，计算 FLOPs、权重大小、算术强度、Roofline 分界点和阶段收益。
 - [最小 GEMM 学习程序](examples/gemm_learning_demo.py)：只依赖 Python 标准库，演示 naive 与 tiled GEMM 的数学等价性、边界处理和结果校验。
+- [CUDA 示例](examples/cuda/)：包含可编译的 Vector Add、naive GEMM 和 CMake 构建入口。
+
+完整章节顺序：
+
+`00 学习路线` → `01 Decode 性能分析` → `02 GEMM 优化阶梯` → `03 索引与逐元素算子` → `04 Reduce/Softmax` → `05 Transpose/访存` → `06 CUDA GEMM Baseline` → `07 Tensor Core/Pipeline` → `08 框架集成` → `09 Benchmark/Profiler` → `10 完整项目实战`
 
 运行示例：
 
@@ -32,6 +37,17 @@ Profiling
 python examples/simulate_gemm_analysis.py
 python examples/gemm_learning_demo.py
 ```
+
+有 CUDA Toolkit 时：
+
+```powershell
+cmake -S examples/cuda -B build/cuda
+cmake --build build/cuda --config Release
+.\build\cuda\Release\vector_add.exe
+.\build\cuda\Release\naive_gemm.exe
+```
+
+Linux/macOS 路径通常为 `build/cuda/vector_add` 和 `build/cuda/naive_gemm`。没有 CUDA 环境时，仍可运行 Python 学习程序和阅读每章的验证方法；不能把未编译的 CUDA 示例当成已在当前机器实测。
 
 ## 重要边界
 

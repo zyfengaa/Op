@@ -166,3 +166,10 @@ HBM → L2 → Shared Memory → Registers → Tensor Core → Result
 7. 优化是否改善端到端性能，是否影响精度和其他 shape？
 
 如果还不能回答这些问题，就继续做小实验；不要用更复杂的 Kernel 掩盖基础概念的不确定性。
+
+## 本章参考资料
+
+- [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/)
+- [CUDA C++ Best Practices Guide](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html)
+- [Nsight Compute Compute Triage Guide](https://docs.nvidia.com/nsight-compute/ComputeTriage/)
+- [Triton Tutorials](https://triton-lang.org/main/getting-started/tutorials/)

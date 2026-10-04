@@ -113,3 +113,10 @@ Vector Add → ReLU → Reduce → Transpose → Softmax
 ```
 
 迁移时复用接口契约、CPU reference、shape/stride 分析、并行分解、内存层级、性能假设和验证闭环；不要把某个 CUDA warp 宽度、某条 MMA 指令或某个 profiler 指标当成通用规律。
+
+## 本章参考资料
+
+- [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/)
+- [CUDA C++ Best Practices Guide](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html)
+- [CUTLASS Documentation](https://docs.nvidia.com/cutlass/)
+- [Triton Matrix Multiplication Tutorial](https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html)

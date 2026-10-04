@@ -14,6 +14,40 @@
 | 03 进阶算子 | [03-advanced-ops](03-advanced-ops/README.md) | FlashAttention、Conv2D、Fusion | 组合算法、数据流和硬件映射 |
 | 04 工程化 | [04-engineering](04-engineering/README.md) | 接口、测试、CI、复现 | 可维护、可集成、可回归的算子 |
 | 05 平台专精 | [05-platform-specialization](05-platform-specialization/README.md) | CUDA/Triton/国产后端迁移 | 保留公共语义，重做平台实现 |
+| 06 模型主线 | [06-model-slice](06-model-slice/README.md) | 完整 Decoder Block、KV Cache、prefill/decode | 整体对齐测试、E2E、阶段 profile 和内存口径 |
+
+## 不只读：修一次错误，交付一个算子，再连成模型
+
+现在可以沿三条相互连接的实践线学习，不必把所有正文读完才开始动手：
+
+| 你现在要解决的问题 | 入口 | 交付物，不只是读后感 |
+|---|---|---|
+| 一个输出为什么错？ | [12 个故障注入任务](exercises/README.md) | 修改 student.py，让 39 组公开回归输入通过，并解释根因 |
+| 怎样算完成一个算子？ | [Vector Add 五件套](01-hello-world-ops/01-vector-add/case-study.md)、[Reduce 五件套](01-hello-world-ops/03-reduction-sum-max/case-study.md) | naive、三个 CUDA 版本、故障修复、真实报告、迁移契约 |
+| 别人的 kernel 我能读懂吗？ | [三段代码、十五道可判定题](exercises/reading/README.md) | 读写责任、同步、mask、资源和越界的判断依据 |
+| 为什么优化后反而变慢？ | [性能反例档案](labs/performance-counterexamples.md) | 从原始样本判断收益、转换成本和测量噪声 |
+| 算子在模型哪里起作用？ | [完整模型切片](06-model-slice/README.md) | 两次 RMSNorm/残差、投影、RoPE、缓存和 Attention 的连贯数据流 |
+| 没有另一块卡怎么练迁移？ | [已运行的第二后端](05-platform-specialization/second-backend.md) | Python reference 与 PyTorch 原生 CPU 的相同语义、不同执行成本 |
+
+先用标准 Python 开始第一个故障，初始判题失败是题目设计，不是安装失败：
+
+~~~powershell
+python exercises/check.py show VA01
+python exercises/check.py grade VA01
+~~~
+
+修改 exercises/fault_injection/student.py 后重复判题；不要修改 expected 或删除失败输入。需要提示和讲解时，回到 [练习导航](exercises/README.md)。
+
+装有 PyTorch 后，另两条主线直接运行：
+
+~~~powershell
+python labs/operator_story.py --output labs/results/local
+python 06-model-slice/run.py --profile --output 06-model-slice/results/local
+~~~
+
+仓库已保存 [算子 CPU 实测与解读](labs/results/cpu-reference/README.md) 和 [模型 CPU 实测与解读](06-model-slice/results/cpu-reference/README.md)，含原始样本、环境、源码哈希、profiler 表、trace 与图。不把 CPU 结果当作 GPU 成绩，也不把候选实现的轻微领先当成稳定收益。
+
+第一次看性能报告，可从 [实验室阅读顺序与排错](labs/README.md) 开始。
 
 ## 新人从这里开始
 
@@ -40,6 +74,9 @@
 03-advanced-ops/                 Attention、卷积、融合
 04-engineering/                  接口、测试和 CI
 05-platform-specialization/      后端专精和迁移
+06-model-slice/                  完整模型切片、缓存测试和真实采样报告
+exercises/                      故障注入、学习者 TODO 和代码阅读判题
+labs/                           跨后端实测、性能反例和原始证据
 checklist/                       阶段门槛、AI 和实验记录模板
 references/                      官方文档、论文和 profiler 模板
 examples/                        可运行脚本及构建入口
@@ -86,6 +123,7 @@ CUDA 程序：
 .\build\cuda\Release\tiled_gemm.exe
 .\build\cuda\Release\row_ops.exe
 .\build\cuda\Release\row_ops.exe --benchmark
+.\build\cuda\Release\operator_ladders.exe --benchmark
 ctest --test-dir build/cuda -C Release --output-on-failure
 ~~~
 
@@ -108,6 +146,7 @@ AI 可加快样板代码、改写和测试草稿；学习者仍需检查索引�
 ## 证据和限制
 
 - 课程中的模拟数据都应明确标注为模拟，不代表具体硬件成绩。
+- 新增两组 CPU 实测报告可复跑；本机模型通过 7 项测试。模型使用随机权重，不是完整预训练语言模型或手写 GPU FlashAttention。
 - CUDA 示例源代码和 CMake 入口已提供；实际编译需在有 CUDA Toolkit 的设备上完成。
 - Triton 教学代码按官方接口编写，需在本机兼容版本和 GPU 上验证。
 - 国产加速卡的 API、工具和约束随 SDK/设备变化；以厂商对应版本的官方资料为准。

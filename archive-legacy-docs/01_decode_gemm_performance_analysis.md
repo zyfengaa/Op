@@ -1,5 +1,7 @@
 # Decode 小 M GEMM：一次完整的算子性能分析
 
+本篇保留旧版假设案例，不作为真实设备成绩。新的 [模型切片与 decode GEMM 实验](../06-model-slice/decode-gemm.md) 提供可运行 block、实际输入形状和本机 CPU 原始报告，请从那里进入实践。
+
 ## 1. 场景和目标
 
 假设从一个 Qwen 类模型的 vLLM Decode profiling 中看到：某个 GEMM 占单 token 端到端耗时的四分之一。我们的目标不是立刻重写 Kernel，而是回答：

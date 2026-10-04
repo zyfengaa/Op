@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="548" viewBox="0 0 1000 548">
+<rect width="100%" height="100%" fill="#f7f9fc"/>
+<g font-family="Arial, sans-serif" fill="#172b4d">
+<text x="24" y="32" font-size="22">decode/optimized - measured CPU stage ranges</text>
+<text x="24" y="59" font-size="13">Profiler-instrumented call; includes instrumentation overhead; not GPU utilization</text>
+<text x="24" y="111" font-size="13">rmsnorm_attn</text>
+<rect x="360" y="95" width="214.467" height="22" rx="3" fill="#4169c8"/>
+<text x="582.467" y="111" font-size="12">457.300 us</text>
+<text x="24" y="145" font-size="13">qkv_projection</text>
+<rect x="360" y="129" width="108.992" height="22" rx="3" fill="#4169c8"/>
+<text x="476.992" y="145" font-size="12">232.400 us</text>
+<text x="24" y="179" font-size="13">rope</text>
+<rect x="360" y="163" width="530.000" height="22" rx="3" fill="#4169c8"/>
+<text x="898.000" y="179" font-size="12">1130.100 us</text>
+<text x="24" y="213" font-size="13">kv_cache</text>
+<rect x="360" y="197" width="68.190" height="22" rx="3" fill="#4169c8"/>
+<text x="436.190" y="213" font-size="12">145.400 us</text>
+<text x="24" y="247" font-size="13">attention</text>
+<rect x="360" y="231" width="195.004" height="22" rx="3" fill="#4169c8"/>
+<text x="563.004" y="247" font-size="12">415.800 us</text>
+<text x="24" y="281" font-size="13">o_projection</text>
+<rect x="360" y="265" width="45.210" height="22" rx="3" fill="#4169c8"/>
+<text x="413.210" y="281" font-size="12">96.400 us</text>
+<text x="24" y="315" font-size="13">residual_attn</text>
+<rect x="360" y="299" width="18.150" height="22" rx="3" fill="#4169c8"/>
+<text x="386.150" y="315" font-size="12">38.700 us</text>
+<text x="24" y="349" font-size="13">rmsnorm_mlp</text>
+<rect x="360" y="333" width="120.623" height="22" rx="3" fill="#4169c8"/>
+<text x="488.623" y="349" font-size="12">257.200 us</text>
+<text x="24" y="383" font-size="13">gate_up_projection</text>
+<rect x="360" y="367" width="113.588" height="22" rx="3" fill="#4169c8"/>
+<text x="481.588" y="383" font-size="12">242.200 us</text>
+<text x="24" y="417" font-size="13">silu_multiply</text>
+<rect x="360" y="401" width="89.998" height="22" rx="3" fill="#4169c8"/>
+<text x="457.998" y="417" font-size="12">191.900 us</text>
+<text x="24" y="451" font-size="13">down_projection</text>
+<rect x="360" y="435" width="74.662" height="22" rx="3" fill="#4169c8"/>
+<text x="442.662" y="451" font-size="12">159.200 us</text>
+<text x="24" y="485" font-size="13">residual_mlp</text>
+<rect x="360" y="469" width="22.793" height="22" rx="3" fill="#4169c8"/>
+<text x="390.793" y="485" font-size="12">48.600 us</text>
+</g></svg>

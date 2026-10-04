@@ -1,0 +1,45 @@
+----------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+                        Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg       CPU Mem  Self CPU Mem    # of Calls
+----------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+          slice/rmsnorm_attn        17.31%       2.012ms        31.37%       3.646ms       3.646ms      16.00 KB     -32.75 KB             1
+                   aten::pow        10.45%       1.214ms        11.95%       1.389ms     231.550us      32.06 KB      32.05 KB             6
+                  slice/rope         7.20%     837.300us        24.24%       2.817ms       2.817ms         512 B    -140.75 KB             1
+                aten::arange         6.49%     754.400us        10.51%       1.221ms     152.612us       2.12 KB           0 B             8
+               aten::reshape         5.73%     666.400us         6.35%     738.200us      49.213us      16.00 KB           0 B            15
+        slice/qkv_projection         5.58%     648.700us        14.41%       1.675ms       1.675ms      48.00 KB           0 B             1
+           aten::masked_fill         4.81%     558.800us         5.91%     686.900us     686.900us      64.00 KB           0 B             1
+                    aten::mm         4.11%     478.200us         4.16%     483.300us      69.043us     144.00 KB     144.00 KB             7
+             slice/attention         2.75%     319.100us        19.09%       2.219ms       2.219ms     148.00 KB    -148.50 KB             1
+                   aten::mul         2.52%     292.700us         2.52%     292.700us      19.513us     164.00 KB     164.00 KB            15
+                  aten::mean         2.42%     281.100us         6.00%     697.200us     348.600us         512 B         512 B             2
+                aten::narrow         2.38%     276.800us         3.23%     375.900us      53.700us           0 B           0 B             7
+                aten::matmul         2.28%     264.800us        13.69%       1.591ms     176.733us     224.00 KB           0 B             9
+                 aten::chunk         2.11%     244.700us         5.44%     632.000us     316.000us           0 B           0 B             2
+              aten::_to_copy         1.78%     206.400us         2.84%     329.700us      29.973us         548 B           0 B            11
+                 aten::slice         1.61%     186.800us         1.96%     228.000us       9.120us           0 B           0 B            25
+              aten::_softmax         1.36%     158.200us         1.36%     158.200us     158.200us      64.00 KB      64.00 KB             1
+           slice/rmsnorm_mlp         1.18%     137.000us         2.84%     329.900us     329.900us           0 B     -48.75 KB             1
+                   aten::bmm         1.08%     125.000us         1.09%     126.300us      63.150us      80.00 KB      80.00 KB             2
+                    aten::to         1.07%     124.200us         3.91%     453.900us      34.915us         548 B           0 B            13
+             aten::unsqueeze         0.99%     114.500us         1.20%     139.500us       7.750us           0 B           0 B            18
+                 aten::copy_         0.88%     101.900us         0.88%     101.900us       7.838us           0 B           0 B            13
+                  aten::div_         0.86%      99.400us         2.62%     304.200us     152.100us           0 B          -8 B             2
+                   aten::sum         0.79%      91.500us         0.96%     111.900us      55.950us           0 B           0 B             2
+                   aten::add         0.75%      87.000us         1.23%     142.400us      23.733us      48.50 KB      48.49 KB             6
+       slice/down_projection         0.73%      85.100us         2.01%     234.100us     234.100us      16.00 KB           0 B             1
+            aten::as_strided         0.72%      83.500us         0.72%      83.500us       1.546us           0 B           0 B            54
+          slice/o_projection         0.64%      74.000us         1.25%     144.900us     144.900us      16.00 KB           0 B             1
+    slice/gate_up_projection         0.62%      72.600us         2.39%     277.300us     277.300us      64.00 KB           0 B             1
+          aten::masked_fill_         0.57%      65.700us         0.57%      65.700us      65.700us           0 B           0 B             1
+              slice/kv_cache         0.54%      62.200us         0.54%      62.200us      62.200us           0 B           0 B             1
+         slice/silu_multiply         0.52%      61.000us         0.82%      95.700us      95.700us      32.00 KB     -32.00 KB             1
+                   aten::cat         0.52%      60.900us         0.76%      88.900us      44.450us      32.00 KB      32.00 KB             2
+                   aten::div         0.49%      57.000us         1.25%     145.400us      48.467us      64.06 KB      64.05 KB             3
+          slice/residual_mlp         0.44%      51.600us         0.59%      68.300us      68.300us      16.00 KB           0 B             1
+         aten::empty_strided         0.43%      49.700us         0.43%      49.700us       4.518us         548 B         548 B            11
+             aten::transpose         0.39%      45.600us         0.46%      53.100us      10.620us           0 B           0 B             5
+                aten::expand         0.34%      39.800us         0.43%      49.600us       8.267us           0 B           0 B             6
+                 aten::split         0.34%      39.400us         3.33%     387.300us     193.650us           0 B           0 B             2
+         slice/residual_attn         0.33%      38.700us         0.45%      52.600us      52.600us      16.00 KB           0 B             1
+----------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+Self CPU time total: 11.621ms

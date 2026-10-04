@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="344" viewBox="0 0 1000 344">
+<rect width="100%" height="100%" fill="#f7f9fc"/>
+<g font-family="Arial, sans-serif" fill="#172b4d">
+<text x="24" y="32" font-size="22">Vector Add / Reduce - N=17</text>
+<text x="24" y="59" font-size="13">Actual CPU timings; float64; 1 torch thread; conversion cost is a separate candidate</text>
+<text x="24" y="111" font-size="13">add/python_loop</text>
+<rect x="360" y="95" width="62.796" height="22" rx="3" fill="#4169c8"/>
+<text x="430.796" y="111" font-size="12">1.750 us</text>
+<text x="24" y="145" font-size="13">add/torch_resident</text>
+<rect x="360" y="129" width="114.827" height="22" rx="3" fill="#4169c8"/>
+<text x="482.827" y="145" font-size="12">3.200 us</text>
+<text x="24" y="179" font-size="13">add/torch_with_conversion</text>
+<rect x="360" y="163" width="530.000" height="22" rx="3" fill="#4169c8"/>
+<text x="898.000" y="179" font-size="12">14.770 us</text>
+<text x="24" y="213" font-size="13">sum/python_loop</text>
+<rect x="360" y="197" width="31.578" height="22" rx="3" fill="#4169c8"/>
+<text x="399.578" y="213" font-size="12">0.880 us</text>
+<text x="24" y="247" font-size="13">sum/python_tree</text>
+<rect x="360" y="231" width="132.769" height="22" rx="3" fill="#4169c8"/>
+<text x="500.769" y="247" font-size="12">3.700 us</text>
+<text x="24" y="281" font-size="13">sum/torch_resident</text>
+<rect x="360" y="265" width="142.458" height="22" rx="3" fill="#4169c8"/>
+<text x="510.458" y="281" font-size="12">3.970 us</text>
+</g></svg>

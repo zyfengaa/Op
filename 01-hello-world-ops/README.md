@@ -10,6 +10,8 @@
 
 ## 本阶段交付物
 
+第一次完整交付请照着 [Vector Add 五件套](01-vector-add/case-study.md) 和 [Reduce 五件套](03-reduction-sum-max/case-study.md) 做：每个案例连接实际版本源码、四个故障任务、原始 profiler 证据、第二后端和模型位置。
+
 每个算子都要有公式、接口契约、reference、至少五种 shape、正确性输出、编译运行命令和性能基线。不能只提交一个 `.cu` 文件。
 
 建议学习时间 2–4 周，依 C++ 和 GPU 环境基础调整。

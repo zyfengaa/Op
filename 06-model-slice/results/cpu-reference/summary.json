@@ -1,0 +1,783 @@
+{
+  "metadata": {
+    "timestamp_utc": "2026-10-04T13:45:30Z",
+    "python": "3.13.1",
+    "torch": "2.8.0+cpu",
+    "os": "Windows-11-10.0.26200-SP0",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD",
+    "device": "CPU",
+    "torch_threads": 1,
+    "git_commit": "79ea34543a017dd0a953123ae9f0cea99913b6ea",
+    "git_dirty": true,
+    "source_sha256": {
+      "06-model-slice/run.py": "61356cf78d124c2b7f0dedf65e051b61debbd615decea6c73b31f426bdb088f2",
+      "06-model-slice/block.py": "5b5012a52ff283c50cbff9b7b03bea973546f89f316e6cc3214b1a3656ce22ee",
+      "course_runtime.py": "34c5c1987035656b4b5838e18afe19b40b0d233c318b50cfd084bf0123b6a6fc"
+    },
+    "torch_build": "PyTorch built with:\n  - C++ Version: 201703\n  - MSVC 193833145\n  - Intel(R) oneAPI Math Kernel Library Version 2025.2-Product Build 20250620 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 2019\n  - LAPACK is enabled (usually provided by MKL)\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=a1cb3cc05d46d198467bebbb6e8fba50a325d4e7, CXX_COMPILER=C:/actions-runner/_work/pytorch/pytorch/pytorch/.ci/pytorch/windows/tmp_bin/sccache-cl.exe, CXX_FLAGS=/DWIN32 /D_WINDOWS /EHsc /Zc:__cplusplus /bigobj /FS /utf-8 -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE /wd4624 /wd4068 /wd4067 /wd4267 /wd4661 /wd4717 /wd4244 /wd4804 /wd4273, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.8.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=OFF, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n"
+  },
+  "config": {
+    "width": 64,
+    "heads": 4,
+    "hidden": 128,
+    "eps": 1e-06
+  },
+  "batch": 1,
+  "prefix_length": 64,
+  "dtype": "float32",
+  "correctness": [
+    {
+      "variant": "reference",
+      "prefill_and_decode": "PASS",
+      "decode_max_abs_error": 6.556510925292969e-07
+    },
+    {
+      "variant": "optimized",
+      "prefill_and_decode": "PASS",
+      "decode_max_abs_error": 5.960464477539062e-07
+    }
+  ],
+  "timing": {
+    "prefill/reference": {
+      "samples_us": [
+        1624.69,
+        1792.2099999999998,
+        1785.8,
+        1660.39,
+        2002.58,
+        1458.73,
+        1427.65,
+        1290.8799999999999,
+        1445.58
+      ],
+      "median_us": 1624.69,
+      "min_us": 1290.8799999999999,
+      "max_us": 2002.58
+    },
+    "decode/reference": {
+      "samples_us": [
+        1240.3600000000001,
+        768.27,
+        1093.15,
+        1024.02,
+        1149.08,
+        813.25,
+        834.49,
+        818.5,
+        736.65
+      ],
+      "median_us": 834.49,
+      "min_us": 736.65,
+      "max_us": 1240.3600000000001
+    },
+    "prefill/optimized": {
+      "samples_us": [
+        1738.03,
+        1876.81,
+        1709.75,
+        1743.3700000000001,
+        1573.27,
+        1418.76,
+        1608.29,
+        1376.8799999999999,
+        1511.9
+      ],
+      "median_us": 1608.29,
+      "min_us": 1376.8799999999999,
+      "max_us": 1876.81
+    },
+    "decode/optimized": {
+      "samples_us": [
+        1220.04,
+        1041.69,
+        1026.83,
+        965.8399999999999,
+        814.1800000000001,
+        777.3100000000001,
+        699.62,
+        765.6800000000001,
+        787.9399999999999
+      ],
+      "median_us": 814.1800000000001,
+      "min_us": 699.62,
+      "max_us": 1220.04
+    }
+  },
+  "measurement": {
+    "warmup": 3,
+    "samples": 9,
+    "calls_per_sample": 10,
+    "scope": "host-wall full block on resident inputs; CUDA synchronized when used; allocations and cache concatenation included",
+    "decode": "one token against a fixed immutable prefix cache; cache does not grow between timing iterations",
+    "not_included": "model construction, checkpoint/tokenization, H2D/D2H, language-model head"
+  },
+  "shapes": {
+    "prefill": {
+      "qkv_gemm": {
+        "M": 64,
+        "K": 64,
+        "N": 192
+      },
+      "o_gemm": {
+        "M": 64,
+        "K": 64,
+        "N": 64
+      },
+      "gate_up_gemm": {
+        "M": 64,
+        "K": 64,
+        "N": 256
+      },
+      "down_gemm": {
+        "M": 64,
+        "K": 128,
+        "N": 64
+      },
+      "q": [
+        1,
+        4,
+        64,
+        16
+      ],
+      "kv": [
+        1,
+        4,
+        64,
+        16
+      ],
+      "logical_score_shape": [
+        1,
+        4,
+        64,
+        64
+      ]
+    },
+    "decode": {
+      "qkv_gemm": {
+        "M": 1,
+        "K": 64,
+        "N": 192
+      },
+      "o_gemm": {
+        "M": 1,
+        "K": 64,
+        "N": 64
+      },
+      "gate_up_gemm": {
+        "M": 1,
+        "K": 64,
+        "N": 256
+      },
+      "down_gemm": {
+        "M": 1,
+        "K": 128,
+        "N": 64
+      },
+      "q": [
+        1,
+        4,
+        1,
+        16
+      ],
+      "kv": [
+        1,
+        4,
+        65,
+        16
+      ],
+      "logical_score_shape": [
+        1,
+        4,
+        1,
+        65
+      ]
+    }
+  },
+  "memory": {
+    "prefill/reference": {
+      "cuda_peak_allocated_bytes": null,
+      "cpu_peak_rss_bytes": null,
+      "status": "CPU run: no CUDA memory; CPU native peak not measured",
+      "logical_output_kv_bytes": 32768
+    },
+    "decode/reference": {
+      "cuda_peak_allocated_bytes": null,
+      "cpu_peak_rss_bytes": null,
+      "status": "CPU run: no CUDA memory; CPU native peak not measured",
+      "logical_output_kv_bytes": 33280
+    },
+    "prefill/optimized": {
+      "cuda_peak_allocated_bytes": null,
+      "cpu_peak_rss_bytes": null,
+      "status": "CPU run: no CUDA memory; CPU native peak not measured",
+      "logical_output_kv_bytes": 32768
+    },
+    "decode/optimized": {
+      "cuda_peak_allocated_bytes": null,
+      "cpu_peak_rss_bytes": null,
+      "status": "CPU run: no CUDA memory; CPU native peak not measured",
+      "logical_output_kv_bytes": 33280
+    }
+  },
+  "profiles": {
+    "prefill/reference": {
+      "stage_ranges": [
+        {
+          "stage": "rmsnorm_attn",
+          "calls": 1,
+          "cpu_total_us": 3646.0,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 31.37369634805356
+        },
+        {
+          "stage": "qkv_projection",
+          "calls": 1,
+          "cpu_total_us": 1674.9000000000005,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 14.412453102949788
+        },
+        {
+          "stage": "rope",
+          "calls": 1,
+          "cpu_total_us": 2816.8,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 24.238460744157234
+        },
+        {
+          "stage": "kv_cache",
+          "calls": 1,
+          "cpu_total_us": 62.19999999999891,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.5352287199256438
+        },
+        {
+          "stage": "attention",
+          "calls": 1,
+          "cpu_total_us": 2218.5,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 19.090111176126392
+        },
+        {
+          "stage": "o_projection",
+          "calls": 1,
+          "cpu_total_us": 144.89999999999964,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.2468591883798545
+        },
+        {
+          "stage": "residual_attn",
+          "calls": 1,
+          "cpu_total_us": 52.600000000000364,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.45262107183423717
+        },
+        {
+          "stage": "rmsnorm_mlp",
+          "calls": 1,
+          "cpu_total_us": 329.89999999999964,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.8387774068082443
+        },
+        {
+          "stage": "gate_up_projection",
+          "calls": 1,
+          "cpu_total_us": 277.2999999999993,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.386156334974007
+        },
+        {
+          "stage": "silu_multiply",
+          "calls": 1,
+          "cpu_total_us": 95.69999999999891,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.8234949919113251
+        },
+        {
+          "stage": "down_projection",
+          "calls": 1,
+          "cpu_total_us": 234.10000000000036,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.0144219185626304
+        },
+        {
+          "stage": "residual_mlp",
+          "calls": 1,
+          "cpu_total_us": 68.30000000000109,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.5877189963170851
+        }
+      ],
+      "native_events": [
+        "aten::square",
+        "aten::pow",
+        "aten::result_type",
+        "aten::to",
+        "aten::mean",
+        "aten::sum",
+        "aten::fill_",
+        "aten::div_",
+        "aten::_to_copy",
+        "aten::empty_strided",
+        "aten::copy_",
+        "aten::add",
+        "aten::rsqrt",
+        "aten::mul",
+        "aten::chunk",
+        "aten::split",
+        "aten::narrow",
+        "aten::slice",
+        "aten::as_strided",
+        "aten::matmul",
+        "aten::reshape",
+        "aten::view",
+        "aten::mm",
+        "aten::resolve_conj",
+        "aten::_unsafe_view",
+        "aten::transpose",
+        "aten::arange",
+        "aten::empty",
+        "aten::resize_",
+        "aten::neg",
+        "aten::div",
+        "aten::unsqueeze",
+        "aten::cos",
+        "aten::sin",
+        "aten::sub",
+        "aten::stack",
+        "aten::cat",
+        "aten::flatten",
+        "aten::le",
+        "aten::expand",
+        "aten::_reshape_alias",
+        "aten::bmm",
+        "aten::bitwise_not",
+        "aten::masked_fill",
+        "aten::clone",
+        "aten::empty_like",
+        "aten::masked_fill_",
+        "aten::softmax",
+        "aten::_softmax",
+        "aten::silu"
+      ],
+      "share_scope": "sum of nonoverlapping CPU stage ranges inside this profiled call; not unprofiled E2E"
+    },
+    "decode/reference": {
+      "stage_ranges": [
+        {
+          "stage": "rmsnorm_attn",
+          "calls": 1,
+          "cpu_total_us": 1010.0000000000002,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 16.89358712742114
+        },
+        {
+          "stage": "qkv_projection",
+          "calls": 1,
+          "cpu_total_us": 457.2000000000003,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 7.647275281838562
+        },
+        {
+          "stage": "rope",
+          "calls": 1,
+          "cpu_total_us": 2357.1,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 39.42561803766768
+        },
+        {
+          "stage": "kv_cache",
+          "calls": 1,
+          "cpu_total_us": 181.40000000000055,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 3.034155153380399
+        },
+        {
+          "stage": "attention",
+          "calls": 1,
+          "cpu_total_us": 962.5,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 16.099086742715684
+        },
+        {
+          "stage": "o_projection",
+          "calls": 1,
+          "cpu_total_us": 148.19999999999982,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.478841200280999
+        },
+        {
+          "stage": "residual_attn",
+          "calls": 1,
+          "cpu_total_us": 53.099999999999454,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.8881677984812406
+        },
+        {
+          "stage": "rmsnorm_mlp",
+          "calls": 1,
+          "cpu_total_us": 347.09999999999945,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 5.8057070217107585
+        },
+        {
+          "stage": "gate_up_projection",
+          "calls": 1,
+          "cpu_total_us": 234.80000000000018,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 3.9273408490282034
+        },
+        {
+          "stage": "silu_multiply",
+          "calls": 1,
+          "cpu_total_us": 74.30000000000018,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.2427658649182112
+        },
+        {
+          "stage": "down_projection",
+          "calls": 1,
+          "cpu_total_us": 96.10000000000036,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.6073997256882941
+        },
+        {
+          "stage": "residual_mlp",
+          "calls": 1,
+          "cpu_total_us": 56.80000000000018,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.9500551968688351
+        }
+      ],
+      "native_events": [
+        "aten::square",
+        "aten::pow",
+        "aten::result_type",
+        "aten::to",
+        "aten::mean",
+        "aten::sum",
+        "aten::fill_",
+        "aten::div_",
+        "aten::_to_copy",
+        "aten::empty_strided",
+        "aten::copy_",
+        "aten::add",
+        "aten::rsqrt",
+        "aten::mul",
+        "aten::chunk",
+        "aten::split",
+        "aten::narrow",
+        "aten::slice",
+        "aten::as_strided",
+        "aten::matmul",
+        "aten::reshape",
+        "aten::view",
+        "aten::mm",
+        "aten::resolve_conj",
+        "aten::_unsafe_view",
+        "aten::transpose",
+        "aten::arange",
+        "aten::empty",
+        "aten::resize_",
+        "aten::neg",
+        "aten::div",
+        "aten::unsqueeze",
+        "aten::cos",
+        "aten::sin",
+        "aten::sub",
+        "aten::stack",
+        "aten::cat",
+        "aten::flatten",
+        "aten::le",
+        "aten::expand",
+        "aten::_reshape_alias",
+        "aten::bmm",
+        "aten::bitwise_not",
+        "aten::masked_fill",
+        "aten::clone",
+        "aten::empty_like",
+        "aten::masked_fill_",
+        "aten::softmax",
+        "aten::_softmax",
+        "aten::silu"
+      ],
+      "share_scope": "sum of nonoverlapping CPU stage ranges inside this profiled call; not unprofiled E2E"
+    },
+    "prefill/optimized": {
+      "stage_ranges": [
+        {
+          "stage": "rmsnorm_attn",
+          "calls": 1,
+          "cpu_total_us": 658.4,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 15.198522622345344
+        },
+        {
+          "stage": "qkv_projection",
+          "calls": 1,
+          "cpu_total_us": 398.10000000000014,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 9.189750692520782
+        },
+        {
+          "stage": "rope",
+          "calls": 1,
+          "cpu_total_us": 1367.3000000000002,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 31.562788550323198
+        },
+        {
+          "stage": "kv_cache",
+          "calls": 1,
+          "cpu_total_us": 42.79999999999973,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.9879963065558575
+        },
+        {
+          "stage": "attention",
+          "calls": 1,
+          "cpu_total_us": 1020.9000000000001,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 23.566481994459846
+        },
+        {
+          "stage": "o_projection",
+          "calls": 1,
+          "cpu_total_us": 124.59999999999945,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.8762696214219647
+        },
+        {
+          "stage": "residual_attn",
+          "calls": 1,
+          "cpu_total_us": 44.79999999999927,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.034164358264065
+        },
+        {
+          "stage": "rmsnorm_mlp",
+          "calls": 1,
+          "cpu_total_us": 249.09999999999945,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 5.7502308402585305
+        },
+        {
+          "stage": "gate_up_projection",
+          "calls": 1,
+          "cpu_total_us": 206.40000000000055,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 4.7645429362881035
+        },
+        {
+          "stage": "silu_multiply",
+          "calls": 1,
+          "cpu_total_us": 81.19999999999982,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.8744228993536438
+        },
+        {
+          "stage": "down_projection",
+          "calls": 1,
+          "cpu_total_us": 102.0,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.3545706371191146
+        },
+        {
+          "stage": "residual_mlp",
+          "calls": 1,
+          "cpu_total_us": 36.399999999999636,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 0.840258541089558
+        }
+      ],
+      "native_events": [
+        "aten::square",
+        "aten::pow",
+        "aten::result_type",
+        "aten::to",
+        "aten::mean",
+        "aten::sum",
+        "aten::fill_",
+        "aten::div_",
+        "aten::_to_copy",
+        "aten::empty_strided",
+        "aten::copy_",
+        "aten::add",
+        "aten::rsqrt",
+        "aten::mul",
+        "aten::matmul",
+        "aten::reshape",
+        "aten::view",
+        "aten::mm",
+        "aten::resolve_conj",
+        "aten::_unsafe_view",
+        "aten::chunk",
+        "aten::split",
+        "aten::narrow",
+        "aten::slice",
+        "aten::as_strided",
+        "aten::_reshape_alias",
+        "aten::transpose",
+        "aten::arange",
+        "aten::empty",
+        "aten::resize_",
+        "aten::neg",
+        "aten::div",
+        "aten::unsqueeze",
+        "aten::cos",
+        "aten::sin",
+        "aten::sub",
+        "aten::stack",
+        "aten::cat",
+        "aten::flatten",
+        "aten::le",
+        "aten::scaled_dot_product_attention",
+        "aten::scalar_tensor",
+        "aten::where",
+        "aten::_scaled_dot_product_flash_attention_for_cpu",
+        "aten::empty_like",
+        "aten::expand",
+        "aten::clone",
+        "aten::silu"
+      ],
+      "share_scope": "sum of nonoverlapping CPU stage ranges inside this profiled call; not unprofiled E2E"
+    },
+    "decode/optimized": {
+      "stage_ranges": [
+        {
+          "stage": "rmsnorm_attn",
+          "calls": 1,
+          "cpu_total_us": 457.29999999999995,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 13.390138205668771
+        },
+        {
+          "stage": "qkv_projection",
+          "calls": 1,
+          "cpu_total_us": 232.4000000000001,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 6.804872335441557
+        },
+        {
+          "stage": "rope",
+          "calls": 1,
+          "cpu_total_us": 1130.1000000000001,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 33.09030217849614
+        },
+        {
+          "stage": "kv_cache",
+          "calls": 1,
+          "cpu_total_us": 145.4000000000001,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 4.2574373389552616
+        },
+        {
+          "stage": "attention",
+          "calls": 1,
+          "cpu_total_us": 415.7999999999997,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 12.174982431482773
+        },
+        {
+          "stage": "o_projection",
+          "calls": 1,
+          "cpu_total_us": 96.40000000000009,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 2.8226750995549335
+        },
+        {
+          "stage": "residual_attn",
+          "calls": 1,
+          "cpu_total_us": 38.69999999999982,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.1331693605059678
+        },
+        {
+          "stage": "rmsnorm_mlp",
+          "calls": 1,
+          "cpu_total_us": 257.2000000000003,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 7.531037713750301
+        },
+        {
+          "stage": "gate_up_projection",
+          "calls": 1,
+          "cpu_total_us": 242.19999999999982,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 7.0918247833216155
+        },
+        {
+          "stage": "silu_multiply",
+          "calls": 1,
+          "cpu_total_us": 191.9000000000001,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 5.618997423284143
+        },
+        {
+          "stage": "down_projection",
+          "calls": 1,
+          "cpu_total_us": 159.19999999999982,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 4.6615132349496315
+        },
+        {
+          "stage": "residual_mlp",
+          "calls": 1,
+          "cpu_total_us": 48.600000000000364,
+          "device_total_us": 0,
+          "share_of_instrumented_stage_cpu_time_pct": 1.4230498945889072
+        }
+      ],
+      "native_events": [
+        "aten::square",
+        "aten::pow",
+        "aten::result_type",
+        "aten::to",
+        "aten::mean",
+        "aten::sum",
+        "aten::fill_",
+        "aten::div_",
+        "aten::_to_copy",
+        "aten::empty_strided",
+        "aten::copy_",
+        "aten::add",
+        "aten::rsqrt",
+        "aten::mul",
+        "aten::matmul",
+        "aten::reshape",
+        "aten::view",
+        "aten::mm",
+        "aten::resolve_conj",
+        "aten::_unsafe_view",
+        "aten::chunk",
+        "aten::split",
+        "aten::narrow",
+        "aten::slice",
+        "aten::as_strided",
+        "aten::transpose",
+        "aten::arange",
+        "aten::empty",
+        "aten::resize_",
+        "aten::neg",
+        "aten::div",
+        "aten::unsqueeze",
+        "aten::cos",
+        "aten::sin",
+        "aten::sub",
+        "aten::stack",
+        "aten::cat",
+        "aten::flatten",
+        "aten::le",
+        "aten::scaled_dot_product_attention",
+        "aten::scalar_tensor",
+        "aten::where",
+        "aten::_scaled_dot_product_flash_attention_for_cpu",
+        "aten::empty_like",
+        "aten::expand",
+        "aten::silu"
+      ],
+      "share_scope": "sum of nonoverlapping CPU stage ranges inside this profiled call; not unprofiled E2E"
+    }
+  },
+  "attention_backend": "PyTorch SDPA automatic dispatch; inspect native_events, do not assume GPU FlashAttention"
+}

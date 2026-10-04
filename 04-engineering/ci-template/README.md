@@ -19,7 +19,7 @@ format/lint
 
 ## 本仓库已经提供的构建和测试入口
 
-CUDA CMake 项目已为 vector_add、block_reduce_sum、naive_gemm、tiled_gemm、row_ops 注册 CTest 项。配置、构建和运行是三步，各自可能失败：
+CUDA CMake 项目已为 vector_add、block_reduce_sum、naive_gemm、tiled_gemm、row_ops、operator_ladders 注册 CTest 项。配置、构建和运行是三步，各自可能失败：
 
 ~~~powershell
 cmake -S examples/cuda -B build/cuda
@@ -34,6 +34,8 @@ ctest --test-dir build/cuda -C Release --output-on-failure
 ## 如何接入 CI
 
 普通无 GPU runner 先执行标准 Python 测试，验证 CPU reference、在线合并与索引数据流；有 PyTorch 的 runner 再执行框架接入示例。GPU correctness/sanitizer 在受控 GPU runner 上运行，并记录设备版本；性能测试使用稳定专用 runner，以免共享环境波动掩盖回归。
+
+新增练习应跑 `python exercises/check.py selftest` 和 `python exercises/reading/check.py --answers exercises/reading/solutions.json`，不要把未完成的学生答案直接接入仓库 CI。模型切片执行 `python -m unittest discover -s 06-model-slice -p "test_*.py" -v`；benchmark 与 profiler 留在独立的测量任务，不靠某个固定微秒数判定普通功能回归。
 
 可把下表当作 CI job 设计，而不是把全部命令塞进一个无法判断失败层次的脚本：
 

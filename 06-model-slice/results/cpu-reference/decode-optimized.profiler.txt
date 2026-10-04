@@ -1,0 +1,45 @@
+-----------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+                                                 Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg       CPU Mem  Self CPU Mem    # of Calls
+-----------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+                                           slice/rope        14.39%     491.600us        33.09%       1.130ms       1.130ms         520 B      -1.95 KB             1
+                                   slice/rmsnorm_attn         6.83%     233.400us        13.39%     457.300us     457.300us         256 B        -524 B             1
+                                  slice/silu_multiply         4.90%     167.500us         5.62%     191.900us     191.900us         512 B        -512 B             1
+                                      slice/attention         4.14%     141.300us        12.17%     415.800us     415.800us         321 B        -520 B             1
+                                          aten::slice         4.11%     140.500us         5.00%     170.600us       6.824us           0 B           0 B            25
+                             slice/gate_up_projection         4.10%     140.100us         7.09%     242.200us     242.200us       1.00 KB           0 B             1
+                                             aten::mm         3.69%     126.100us         3.79%     129.300us      32.325us       2.25 KB       2.25 KB             4
+                                            aten::pow         3.49%     119.200us         5.91%     201.700us      33.617us         576 B         568 B             6
+                                    slice/rmsnorm_mlp         3.34%     114.000us         7.53%     257.200us     257.200us           0 B        -780 B             1
+                                       aten::_to_copy         3.13%     106.800us         4.81%     164.200us      16.420us          40 B           0 B            10
+                                            aten::mul         2.69%      91.700us         2.69%      91.700us       6.113us       2.56 KB       2.56 KB            15
+                                 slice/qkv_projection         2.66%      90.800us         6.80%     232.400us     232.400us         768 B           0 B             1
+                                       slice/kv_cache         2.40%      81.800us         4.26%     145.400us     145.400us      31.50 KB      -1.00 KB             1
+                                      aten::unsqueeze         2.32%      79.300us         2.87%      97.900us       5.439us           0 B           0 B            18
+                                slice/down_projection         2.20%      75.200us         4.66%     159.200us     159.200us         256 B           0 B             1
+    aten::_scaled_dot_product_flash_attention_for_cpu         2.20%      75.000us         3.89%     132.800us     132.800us         272 B        -332 B             1
+                                         aten::arange         2.15%      73.500us         4.17%     142.300us      17.787us       1.16 KB           0 B             8
+                                         aten::matmul         1.96%      66.900us         7.09%     242.000us      60.500us       2.25 KB           0 B             4
+                                            aten::cat         1.79%      61.200us         2.48%      84.700us      21.175us      33.00 KB      33.00 KB             4
+                                   slice/o_projection         1.75%      59.900us         2.82%      96.400us      96.400us         256 B           0 B             1
+                                     aten::as_strided         1.75%      59.800us         1.75%      59.800us       1.107us           0 B           0 B            54
+                                            aten::add         1.45%      49.600us         2.35%      80.100us      13.350us         776 B         768 B             6
+                                           aten::div_         1.28%      43.700us         2.92%      99.800us      49.900us           0 B          -8 B             2
+                                      aten::transpose         1.22%      41.800us         1.52%      52.000us       5.200us           0 B           0 B            10
+                                        aten::reshape         1.14%      39.000us         1.68%      57.400us       7.175us           0 B           0 B             8
+                                          aten::stack         1.14%      38.900us         2.41%      82.200us      41.100us         512 B           0 B             2
+                                   slice/residual_mlp         1.09%      37.300us         1.42%      48.600us      48.600us         256 B           0 B             1
+                                             aten::to         1.05%      35.900us         5.86%     200.100us      15.392us          40 B           0 B            13
+                                          aten::copy_         1.05%      35.700us         1.05%      35.700us       3.570us           0 B           0 B            10
+                                          aten::where         1.01%      34.400us         1.82%      62.100us      31.050us         520 B         256 B             2
+                                         aten::narrow         1.00%      34.300us         2.48%      84.700us      12.100us           0 B           0 B             7
+                                            aten::sum         0.95%      32.300us         1.05%      35.700us      17.850us           0 B           0 B             2
+                                           aten::mean         0.92%      31.400us         4.89%     166.900us      83.450us           8 B           8 B             2
+                                  slice/residual_attn         0.90%      30.600us         1.13%      38.700us      38.700us         256 B           0 B             1
+                   aten::scaled_dot_product_attention         0.75%      25.500us         5.92%     202.200us     202.200us         256 B        -280 B             1
+                                           aten::view         0.73%      24.800us         0.73%      24.800us       2.255us           0 B           0 B            11
+                                  aten::empty_strided         0.72%      24.600us         0.72%      24.600us       2.236us         296 B         296 B            11
+                                            aten::div         0.62%      21.200us         2.37%      81.000us      40.500us          64 B          56 B             2
+                                            aten::cos         0.61%      20.900us         0.61%      20.900us      10.450us          64 B          64 B             2
+                                         aten::square         0.61%      20.700us         3.10%     106.000us      53.000us         512 B           0 B             2
+-----------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+Self CPU time total: 3.415ms

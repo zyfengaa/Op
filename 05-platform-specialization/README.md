@@ -2,7 +2,7 @@
 
 先完成通用路线，再根据明确硬件选择专精方向。
 
-先读 [平台迁移实操](migration-lab.md)，看 Vector Add 如何保留公共语义、重做设备映射。
+先做 [已运行的第二后端实验](second-backend.md)：在 Python reference 和 PyTorch 原生 CPU 上执行同一份 add/sum 契约，观察转换成本和性能反转。再读 [平台迁移实操](migration-lab.md)，把这一经历推广到设备映射。原生 CPU 实验不等于已验证国产 NPU 或某种 SIMD 指令。
 
 ## 共同能力
 

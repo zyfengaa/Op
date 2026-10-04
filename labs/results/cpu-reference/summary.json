@@ -1,0 +1,492 @@
+{
+  "metadata": {
+    "timestamp_utc": "2026-10-04T13:33:42Z",
+    "python": "3.13.1",
+    "torch": "2.8.0+cpu",
+    "os": "Windows-11-10.0.26200-SP0",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD",
+    "device": "CPU",
+    "torch_threads": 1,
+    "git_commit": "79ea34543a017dd0a953123ae9f0cea99913b6ea",
+    "git_dirty": true,
+    "source_sha256": {
+      "labs/operator_story.py": "0ca655de5f95af73b4b617da74549369d39cb3f8c1a2b9ede1fe52d21623408c",
+      "course_runtime.py": "34c5c1987035656b4b5838e18afe19b40b0d233c318b50cfd084bf0123b6a6fc"
+    },
+    "torch_build": "PyTorch built with:\n  - C++ Version: 201703\n  - MSVC 193833145\n  - Intel(R) oneAPI Math Kernel Library Version 2025.2-Product Build 20250620 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\n  - OpenMP 2019\n  - LAPACK is enabled (usually provided by MKL)\n  - CPU capability usage: AVX512\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=a1cb3cc05d46d198467bebbb6e8fba50a325d4e7, CXX_COMPILER=C:/actions-runner/_work/pytorch/pytorch/pytorch/.ci/pytorch/windows/tmp_bin/sccache-cl.exe, CXX_FLAGS=/DWIN32 /D_WINDOWS /EHsc /Zc:__cplusplus /bigobj /FS /utf-8 -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DLIBKINETO_NOXPUPTI=ON -DUSE_FBGEMM -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE /wd4624 /wd4068 /wd4067 /wd4267 /wd4661 /wd4717 /wd4244 /wd4804 /wd4273, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.8.0, USE_CUDA=0, USE_CUDNN=OFF, USE_CUSPARSELT=OFF, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=OFF, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n"
+  },
+  "contract": "finite float64 values; sum returns scalar, add returns newly allocated values",
+  "measurement": {
+    "samples": 9,
+    "calls_per_sample": 10,
+    "warmup": 3,
+    "scope": "CPU host-wall; Python lists versus resident torch tensors; conversion explicitly separate",
+    "threads": 1,
+    "profiler_input_size": 65536
+  },
+  "correctness": [
+    {
+      "size": 1,
+      "vector_add": "PASS",
+      "reduce_sum": "PASS"
+    },
+    {
+      "size": 17,
+      "vector_add": "PASS",
+      "reduce_sum": "PASS"
+    },
+    {
+      "size": 1024,
+      "vector_add": "PASS",
+      "reduce_sum": "PASS"
+    },
+    {
+      "size": 65536,
+      "vector_add": "PASS",
+      "reduce_sum": "PASS"
+    }
+  ],
+  "rows": [
+    {
+      "size": 1,
+      "variant": "add/python_loop",
+      "samples_us": [
+        1.1800000000000002,
+        0.55,
+        0.54,
+        0.52,
+        0.47000000000000003,
+        0.8,
+        0.52,
+        0.79,
+        1.01
+      ],
+      "median_us": 0.55,
+      "min_us": 0.47000000000000003,
+      "max_us": 1.1800000000000002
+    },
+    {
+      "size": 1,
+      "variant": "add/torch_resident",
+      "samples_us": [
+        4.0600000000000005,
+        2.9699999999999998,
+        2.94,
+        2.9,
+        2.94,
+        3.3,
+        3.07,
+        5.54,
+        5.93
+      ],
+      "median_us": 3.07,
+      "min_us": 2.9,
+      "max_us": 5.93
+    },
+    {
+      "size": 1,
+      "variant": "add/torch_with_conversion",
+      "samples_us": [
+        17.330000000000002,
+        12.86,
+        12.65,
+        22.89,
+        13.25,
+        15.98,
+        11.23,
+        23.759999999999998,
+        22.35
+      ],
+      "median_us": 15.98,
+      "min_us": 11.23,
+      "max_us": 23.759999999999998
+    },
+    {
+      "size": 1,
+      "variant": "sum/python_loop",
+      "samples_us": [
+        0.3,
+        0.22999999999999998,
+        0.26,
+        0.22999999999999998,
+        0.24,
+        0.35,
+        0.3,
+        0.44000000000000006,
+        0.45
+      ],
+      "median_us": 0.3,
+      "min_us": 0.22999999999999998,
+      "max_us": 0.45
+    },
+    {
+      "size": 1,
+      "variant": "sum/python_tree",
+      "samples_us": [
+        0.95,
+        0.9,
+        0.54,
+        0.32999999999999996,
+        0.3,
+        0.63,
+        0.35,
+        0.78,
+        0.47000000000000003
+      ],
+      "median_us": 0.54,
+      "min_us": 0.3,
+      "max_us": 0.95
+    },
+    {
+      "size": 1,
+      "variant": "sum/torch_resident",
+      "samples_us": [
+        3.87,
+        3.9799999999999995,
+        3.54,
+        3.4799999999999995,
+        9.74,
+        3.7600000000000002,
+        28.93,
+        7.74,
+        4.86
+      ],
+      "median_us": 3.9799999999999995,
+      "min_us": 3.4799999999999995,
+      "max_us": 28.93
+    },
+    {
+      "size": 17,
+      "variant": "add/python_loop",
+      "samples_us": [
+        1.7899999999999998,
+        1.97,
+        1.7399999999999998,
+        1.77,
+        1.73,
+        1.75,
+        1.73,
+        1.8199999999999998,
+        1.7399999999999998
+      ],
+      "median_us": 1.75,
+      "min_us": 1.73,
+      "max_us": 1.97
+    },
+    {
+      "size": 17,
+      "variant": "add/torch_resident",
+      "samples_us": [
+        3.2,
+        3.15,
+        3.19,
+        3.07,
+        3.2,
+        3.2,
+        3.2,
+        3.2,
+        3.19
+      ],
+      "median_us": 3.2,
+      "min_us": 3.07,
+      "max_us": 3.2
+    },
+    {
+      "size": 17,
+      "variant": "add/torch_with_conversion",
+      "samples_us": [
+        15.14,
+        17.29,
+        14.440000000000001,
+        14.63,
+        14.77,
+        14.23,
+        14.88,
+        14.7,
+        15.59
+      ],
+      "median_us": 14.77,
+      "min_us": 14.23,
+      "max_us": 17.29
+    },
+    {
+      "size": 17,
+      "variant": "sum/python_loop",
+      "samples_us": [
+        0.95,
+        0.86,
+        0.8800000000000001,
+        0.85,
+        0.9,
+        0.79,
+        0.9099999999999999,
+        0.8,
+        0.89
+      ],
+      "median_us": 0.8800000000000001,
+      "min_us": 0.79,
+      "max_us": 0.95
+    },
+    {
+      "size": 17,
+      "variant": "sum/python_tree",
+      "samples_us": [
+        4.46,
+        3.8299999999999996,
+        3.63,
+        3.6,
+        3.7600000000000002,
+        3.5700000000000003,
+        3.79,
+        3.6399999999999997,
+        3.7
+      ],
+      "median_us": 3.7,
+      "min_us": 3.5700000000000003,
+      "max_us": 4.46
+    },
+    {
+      "size": 17,
+      "variant": "sum/torch_resident",
+      "samples_us": [
+        4.01,
+        3.8200000000000003,
+        4.01,
+        3.8,
+        3.97,
+        3.6799999999999997,
+        4.13,
+        3.81,
+        4.25
+      ],
+      "median_us": 3.97,
+      "min_us": 3.6799999999999997,
+      "max_us": 4.25
+    },
+    {
+      "size": 1024,
+      "variant": "add/python_loop",
+      "samples_us": [
+        91.47,
+        116.10999999999999,
+        129.44,
+        109.72999999999999,
+        90.81,
+        84.1,
+        79.65,
+        102.83,
+        92.46000000000001
+      ],
+      "median_us": 92.46000000000001,
+      "min_us": 79.65,
+      "max_us": 129.44
+    },
+    {
+      "size": 1024,
+      "variant": "add/torch_resident",
+      "samples_us": [
+        4.34,
+        6.15,
+        14.63,
+        12.120000000000001,
+        9.03,
+        3.72,
+        4.64,
+        6.4799999999999995,
+        13.09
+      ],
+      "median_us": 6.4799999999999995,
+      "min_us": 3.72,
+      "max_us": 14.63
+    },
+    {
+      "size": 1024,
+      "variant": "add/torch_with_conversion",
+      "samples_us": [
+        178.79000000000002,
+        350.29,
+        269.41999999999996,
+        211.91,
+        271.01,
+        185.76,
+        167.97,
+        224.95,
+        197.75
+      ],
+      "median_us": 211.91,
+      "min_us": 167.97,
+      "max_us": 350.29
+    },
+    {
+      "size": 1024,
+      "variant": "sum/python_loop",
+      "samples_us": [
+        39.79,
+        41.489999999999995,
+        36.03,
+        36.54,
+        36.93,
+        36.14,
+        36.089999999999996,
+        37.18,
+        34.0
+      ],
+      "median_us": 36.54,
+      "min_us": 34.0,
+      "max_us": 41.489999999999995
+    },
+    {
+      "size": 1024,
+      "variant": "sum/python_tree",
+      "samples_us": [
+        165.32999999999998,
+        200.82,
+        190.79000000000002,
+        164.3,
+        183.78,
+        205.73000000000002,
+        188.75,
+        214.68,
+        157.45
+      ],
+      "median_us": 188.75,
+      "min_us": 157.45,
+      "max_us": 214.68
+    },
+    {
+      "size": 1024,
+      "variant": "sum/torch_resident",
+      "samples_us": [
+        8.55,
+        4.05,
+        9.43,
+        4.15,
+        10.32,
+        4.4399999999999995,
+        9.08,
+        9.75,
+        7.18
+      ],
+      "median_us": 8.55,
+      "min_us": 4.05,
+      "max_us": 10.32
+    },
+    {
+      "size": 65536,
+      "variant": "add/python_loop",
+      "samples_us": [
+        6457.67,
+        6481.76,
+        8912.98,
+        9664.3,
+        8308.039999999999,
+        7425.539999999999,
+        7834.360000000001,
+        7181.2,
+        7454.5
+      ],
+      "median_us": 7454.5,
+      "min_us": 6457.67,
+      "max_us": 9664.3
+    },
+    {
+      "size": 65536,
+      "variant": "add/torch_resident",
+      "samples_us": [
+        74.99,
+        45.8,
+        78.3,
+        69.62,
+        74.39,
+        75.75,
+        77.9,
+        52.07000000000001,
+        54.23
+      ],
+      "median_us": 74.39,
+      "min_us": 45.8,
+      "max_us": 78.3
+    },
+    {
+      "size": 65536,
+      "variant": "add/torch_with_conversion",
+      "samples_us": [
+        16848.32,
+        12384.77,
+        22684.84,
+        25972.379999999997,
+        14317.25,
+        20296.0,
+        17308.870000000003,
+        15014.02,
+        14572.88
+      ],
+      "median_us": 16848.32,
+      "min_us": 12384.77,
+      "max_us": 25972.379999999997
+    },
+    {
+      "size": 65536,
+      "variant": "sum/python_loop",
+      "samples_us": [
+        2476.8900000000003,
+        1844.6299999999999,
+        3562.97,
+        4139.3099999999995,
+        2373.79,
+        3555.35,
+        2560.96,
+        1860.67,
+        2129.12
+      ],
+      "median_us": 2476.8900000000003,
+      "min_us": 1844.6299999999999,
+      "max_us": 4139.3099999999995
+    },
+    {
+      "size": 65536,
+      "variant": "sum/python_tree",
+      "samples_us": [
+        14678.789999999999,
+        14104.4,
+        23071.93,
+        26322.72,
+        19383.19,
+        22687.16,
+        16770.39,
+        12033.0,
+        12135.99
+      ],
+      "median_us": 16770.39,
+      "min_us": 12033.0,
+      "max_us": 26322.72
+    },
+    {
+      "size": 65536,
+      "variant": "sum/torch_resident",
+      "samples_us": [
+        34.69,
+        26.1,
+        98.88,
+        86.67999999999999,
+        107.89000000000001,
+        84.03,
+        38.94,
+        27.79,
+        39.03
+      ],
+      "median_us": 39.03,
+      "min_us": 26.1,
+      "max_us": 107.89000000000001
+    }
+  ],
+  "native_profile_events": [
+    "story/vector_add",
+    "aten::add",
+    "story/reduce_sum",
+    "aten::sum",
+    "aten::as_strided",
+    "aten::fill_"
+  ],
+  "gpu_ncu_evidence": null
+}

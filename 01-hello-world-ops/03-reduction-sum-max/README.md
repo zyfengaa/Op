@@ -2,6 +2,8 @@
 
 请先读 [完整手算与代码讲解](walkthrough.md)。本页保留阶段路线和验收要点。
 
+动手主线在 [Reduce 完整开发经历：五件套](case-study.md)：串行、单 block 和实际两阶段 CUDA 实现，四个可判定故障，以及一份真实 CPU profile 的逐项解读。
+
 ## 为什么它是第一个分水岭
 
 Vector Add 中每个输出独立；Reduce 的输出依赖多个输入。线程先算局部 partial，再进行线程间合并，因此出现同步、竞争、atomic 和浮点加法顺序问题。

@@ -2,6 +2,21 @@
 
 阶段时间仅作参考；达到能力门槛再进入下一阶段。
 
+## 先看要留下什么证据
+
+不以“读完章节”替代能力验收。每个阶段保留能复跑的代码、原始输入、检查结果和解释；设备不可用时将硬件项标为待验证，不填造性能数字。
+
+| 实践关卡 | 自动检查 | 还需人工解释 |
+|---|---|---|
+| Add 完整案例 | VA01–VA04 学生修复通过 | ceil 覆盖、stride、广播轴、四元素尾部各解决什么 |
+| Reduce 完整案例 | RD01–RD04 学生修复通过 | identity/count、奇数长度、两阶段全部成本 |
+| 进阶故障 | SM01/LN01/GM01/AT01 通过 | 下溢、带权合并、协作装载、状态重缩放 |
+| 陌生代码阅读 | 自己填写的答案达到 15/15 | 每题一句依据，不能只提交选项 |
+| 性能证据 | 生成自己的 summary、trace 和图 | 分清实测/预测，解释一次性能反转或不明显收益 |
+| 模型切片 | 7 项测试与 runner 对照通过 | prefill/decode shape、绝对位置、causal、cache 和计时范围 |
+
+命令和题目见 [调试训练场](../exercises/README.md)、[模型主线](../06-model-slice/README.md)。运行参考解只验证题库，不能替代学生提交自己的实现。
+
 ## Gate 0 · 基础
 
 - 能从公式写出 CPU reference。
@@ -50,3 +65,17 @@
 - 能识别未经验证的硬件假设与过时 API。
 - 留有假设、证据、修改和实测结果。
 - 不把 AI 生成的 benchmark 数字当成设备实测。
+
+## Gate 7 · 从算子到模型
+
+- 能从 block 的数据流找到两次 RMSNorm、两次残差和全部投影。
+- 能推导 QKV/MLP 的 M/K/N，以及 prefill 与单 token decode 的不同。
+- 完整、分段和逐 token 执行在约定误差下对齐，且旧 KV Cache 不被修改。
+- 能解释 SDPA 的实际分派证据，不把 API 名称直接当成 GPU 实现。
+- 报告包含 E2E 的原始采样，阶段 profile 与 E2E 分开解读。
+- 区分逻辑 KV 体积、allocator baseline/peak 和进程 RSS；没有测到的字段不冒充实测。
+
+## 参考资料
+
+- [PyTorch Custom Operators](https://docs.pytorch.org/tutorials/advanced/python_custom_ops.html)：框架接入的测试层次。
+- [PyTorch Benchmark](https://docs.pytorch.org/tutorials/recipes/recipes/benchmark.html)：可复现测量与运行环境。

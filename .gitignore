@@ -2,3 +2,5 @@ __pycache__/
 *.py[cod]
 build/
 *.ncu-rep
+labs/results/local/
+06-model-slice/results/local/

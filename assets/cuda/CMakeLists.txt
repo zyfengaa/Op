@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.24)
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+  set(CMAKE_CUDA_ARCHITECTURES native)
+endif()
+project(op_cuda_examples LANGUAGES CXX CUDA)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 17)
+
+add_executable(vector_add ../../03-operators/elementwise/vector-add/impl/vector_add.cu)
+add_executable(block_reduce_sum ../../03-operators/reduction/impl/block_reduce_sum.cu)
+add_executable(naive_gemm ../../03-operators/matmul/impl/v1-naive/naive_gemm.cu)
+add_executable(tiled_gemm ../../03-operators/matmul/impl/v2-tiled/tiled_gemm.cu)
+add_executable(row_ops row_ops.cu)
+add_executable(operator_ladders operator_ladders.cu)
+
+target_compile_options(vector_add PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+target_compile_options(block_reduce_sum PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+target_compile_options(naive_gemm PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+target_compile_options(tiled_gemm PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+target_compile_options(row_ops PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+target_compile_options(operator_ladders PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lineinfo>)
+
+enable_testing()
+foreach(example vector_add block_reduce_sum naive_gemm tiled_gemm row_ops operator_ladders)
+  add_test(NAME ${example} COMMAND ${example})
+endforeach()

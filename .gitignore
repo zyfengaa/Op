@@ -4,3 +4,5 @@ build/
 *.ncu-rep
 labs/results/local/
 06-model-slice/results/local/
+09-practice/operator-stories/results/local/
+09-practice/model-slice/results/local/

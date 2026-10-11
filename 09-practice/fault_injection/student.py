@@ -6,6 +6,8 @@ Use: python 09-practice/check.py grade VA01
 from . import broken
 
 
+# 统一入口：所有题都经由 solve() 分发。按 case_id 分支，只覆盖你真正修好的那几题；
+# 未覆盖的题继续委托给 broken 以保留原始故障证据（见下方 TODO 列表）。
 def solve(case_id, payload):
     # TODO VA01: repair launch coverage; support empty input and tails.
     # TODO VA02: respect the logical view's element stride.

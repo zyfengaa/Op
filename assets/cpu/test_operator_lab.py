@@ -17,31 +17,41 @@ class OperatorLabTest(unittest.TestCase):
         q, k, v = [[1.0], [0.0]], [[1.0], [0.0]], [[10.0], [20.0]]
         full = attention(q, k, v)
         causal = attention(q, k, v, causal=True)
+        # 非因果：权重 softmax([1,0])，输出 = (10e + 20)/(e + 1) ≈ 12.689414。
         self.assertAlmostEqual(full[0][0], 12.689414, places=5)
+        # 因果：第 0 行只能看见 v[0]=10，第 1 行看见两行取加权（此处等权）得 15。
         self.assertEqual(causal, [[10.0], [15.0]])
 
     def test_conv_and_fusion(self):
+        # 3x3 输入用 [[1,0],[0,-1]] 做 cross-correlation，每个窗口都得到 -4。
         self.assertEqual(conv2d_single_channel(
             [[1, 2, 3], [4, 5, 6], [7, 8, 9]], [[1, 0], [0, -1]]),
             [[-4.0, -4.0], [-4.0, -4.0]])
+        # bias 按列广播后过 relu：负值被压成 0，正值保留 value+bias。
         self.assertEqual(bias_relu([[-2.0, 1.0], [3.0, -4.0]], [1.0, 2.0]),
                          [[0.0, 3.0], [4.0, 0.0]])
 
     def test_tail_and_stride(self):
+        # N=10、block=4：grid=3，总共发射 12 个线程，其中 10 个 valid（对应 VA01）。
         self.assertEqual(ceil_div(10, 4), 3)
         items = list(one_dimensional_grid(10, 4))
         self.assertEqual(len(items), 12)
         self.assertEqual(sum(valid for _, _, _, valid in items), 10)
+        # stride=8 时 A[2,3] 的线性地址 = 2*8+3 = 19（对应 VA02 的 stride 视角）。
         self.assertEqual(offset(2, 3, 8), 19)
 
     def test_elementwise_edge_values(self):
+        # 空输入是合法边界，应返回空列表而不是报错。
         self.assertEqual(vector_add([], []), [])
         self.assertEqual(vector_add([1.0, -2.0], [3.0, 4.0]), [4.0, 2.0])
+        # ±1000 处返回精确的 1.0/0.0：这是 sigmoid 的分支避免溢出的直接证据。
         self.assertEqual(sigmoid_scalar(1000.0), 1.0)
         self.assertEqual(sigmoid_scalar(-1000.0), 0.0)
 
     def test_reduction_padding_identity(self):
+        # 5 个数的和是 15，补齐到 8 不改变结果（补的是加法 identity 0）。
         self.assertEqual(tree_sum([1.0, 2.0, 3.0, 4.0, 5.0])[0], 15.0)
+        # 全负输入的最大值必须是 -2：padding 补的是 -inf 而不是 0（RD02）。
         self.assertEqual(tree_max([-5.0, -2.0, -9.0]), -2.0)
         with self.assertRaises(ValueError):
             tree_max([])
@@ -51,20 +61,25 @@ class OperatorLabTest(unittest.TestCase):
         expected = stable_softmax(x)
         m, l = online_normalizer(x, block_size=2)
         actual = [math.exp(value - m) / l for value in x]
+        # 分块单遍的结果必须与两遍 stable 版本一致，且概率和为 1（SM01）。
         for a, b in zip(actual, expected):
             self.assertAlmostEqual(a, b, places=12)
         self.assertAlmostEqual(sum(actual), 1.0, places=12)
 
     def test_layernorm_constant_row(self):
+        # 常数行方差为 0，value-mean 也恒为 0，输出应精确为全 0；
+        # 若 eps 处理不当这里会变成 inf/NaN。
         result = layer_norm([7.0] * 4, [1.0] * 4, [0.0] * 4)
         self.assertEqual(result, [0.0] * 4)
 
     def test_gemm_all_dimensions_have_tails(self):
+        # M=3, N=4, K=5 都不是 tile=2 的倍数：三个方向都会走到尾块。
         a = [[float((r + c) % 4) for c in range(5)] for r in range(3)]
         b = [[float((r - c) % 5) for c in range(4)] for r in range(5)]
         expected = naive_gemm(a, b)
         actual, _ = tiled_gemm(a, b, tile=2)
         self.assertEqual(actual, expected)
+        # tile=0 会让内层循环空转、静默输出全 0，必须显式报错。
         with self.assertRaises(ValueError):
             tiled_gemm(a, b, tile=0)
 

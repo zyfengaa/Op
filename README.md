@@ -2,17 +2,51 @@
 
 面向有普通开发经验、但没有系统做过 GPU/NPU 算子开发的人。目标不是“读过”，而是能解释正确性、性能和硬件行为，并能审查 AI 生成的实现。
 
-这个仓库同时服务两种用法：**学**的人顺着流程主线走，**查**的人直接进知识域。两条路径共用同一份内容，不重复维护。
+## 30 秒起步
 
-## 三条使用路径
+~~~powershell
+python 09-practice/check.py show VA01
+python 09-practice/check.py grade VA01
+~~~
 
-| 你要做什么 | 从哪进 | 说明 |
+这是一道**有明确对错**的故障题：`student.py` 里是一个有 bug 的向量加法实现，改到判题通过为止。初次运行判题失败是**题目设计**，不是环境装错了。
+
+这两条命令只需要标准 Python——不需要 GPU，不需要 PyTorch。
+
+## 这个仓库怎么组织
+
+一条主线加一个索引，两部分共用同一份内容，不重复维护。
+
+```mermaid
+flowchart LR
+  subgraph T["时间轴 · 01-workflow"]
+    W1["解剖"] --> W2["基线"] --> W3["测量"] --> W4["采集"] --> W5["定位"] --> W6["选手段"] --> W7["实施"] --> W8["验收"]
+  end
+  subgraph S["空间索引 · 02-07"]
+    K1["02-foundations<br/>执行模型 · 内存 · 契约"]
+    K2["03-operators<br/>算子知识 · 推导 · 实现"]
+    K3["04-performance<br/>测量 · 分析 · 手法"]
+  end
+  W1 -.查.-> K1
+  W2 -.查.-> K2
+  W5 -.查.-> K3
+```
+
+**主线是时间轴**，回答“我现在卡住了，下一步做什么”。九个阶段，每步产出一份证据，下一步只依赖上一步的证据。入口：[流程主线](01-workflow/README.md)。
+
+**知识域是空间索引**，回答“这个概念是什么、这个算子怎么写”。按需直达，不用按顺序读。入口：[目录结构](#目录结构)。
+
+编号是**类型分组**，不是难度梯度。`03-operators/attention` 和 `03-operators/elementwise` 之间没有先后依赖，按 `00 → 99` 硬读会卡在 `02-foundations/contracts/`——那四份是判据清单，是查的，不是读的。
+
+## 按你的情况选入口
+
+| 你的情况 | 从哪进 | 说明 |
 |---|---|---|
-| **学**：系统建立算子开发能力 | [流程主线](01-workflow/README.md) | 一个算子从需求到交付的九个阶段，每步给证据和判据 |
-| **查**：手头有个具体问题 | [目录结构](#目录结构) 或 [术语表](99-reference/glossary.md) | 按知识域直达，不用按课程顺序 |
-| **练**：动手验证理解 | [练习层](09-practice/README.md) | 12 个故障题、15 道阅读题、算子五件套、完整模型切片 |
+| **没写过 CUDA，想系统学** | [00-start](00-start/README.md) → [流程主线](01-workflow/README.md) → [算子域](03-operators/README.md) | 先建立线程与内存的心智模型，再顺着九个阶段走完一个算子 |
+| **手头有个算子要写** | [决策树](99-reference/decision-tree.md) | 先判断该不该自己写，再找对应算子类别 |
+| **想先动手** | [练习层](09-practice/README.md) | 12 个故障题、15 道阅读题、算子五件套、完整模型切片 |
 
-第一次来，建议先读 [流程主线](01-workflow/README.md)——它给出全局地图，之后无论学还是查都不容易迷路。环境从 [00-start](00-start/README.md) 开始。
+三条路径共用同一份内容。**第一次来，从上面“30 秒起步”那道题开始最省事**——它给你的第一个反馈是“对/错”，而不是“读完了”。
 
 ## 目录结构
 
@@ -31,7 +65,7 @@
 assets/             可运行代码与构建入口
 ~~~
 
-**主线是时间轴**，告诉你下一步做什么；**知识域是空间索引**，告诉你具体知识在哪。每个阶段页链接到对应知识域，每个知识域页反向标注它服务于哪个阶段。
+每个阶段页链接到对应知识域，每个知识域页反向标注它服务于哪个阶段。学的时候顺着主线走，查的时候直接进知识域。
 
 ## 算子域怎么读
 
@@ -49,22 +83,32 @@ assets/             可运行代码与构建入口
 
 同一个算子，查的人读 README，学的人读 walkthrough，踩坑的人对照 impl 和反例。
 
-## 无 GPU 也能开始的实验
+## 没有 GPU 能走到哪一步
 
-仓库的 CUDA 代码需要 NVIDIA GPU 和 CUDA Toolkit；其余部分只需要标准 Python，装有 PyTorch 后范围更大。[00-start](00-start/README.md) 里有完整的能力矩阵：哪些章节能做完、哪些只能读、哪些必须等设备。
+**只装标准 Python 就能走完大部分内容。** CUDA 只影响你能不能拿到真实硬件数字，不影响你能不能理解内容。
+
+| 档位 | 需要什么 | 能做什么 |
+|---|---|---|
+| A | 标准 Python | 故障题、阅读题、CPU 教学实验 |
+| B | A + PyTorch（CPU 版即可） | 算子故事实测、模型切片、框架接入实验 |
+| C | B + NVIDIA GPU + CUDA Toolkit + CMake | 编译运行 `assets/cuda/` 的 CUDA 示例 |
+
+**一条纪律**：无 GPU 时得到的 CPU 数字，不能用来推断 HBM 带宽、bank conflict、寄存器数或 Tensor Core 利用率——这些量只在设备上才有意义。
+
+逐项的能力矩阵（哪节可完成、哪节只能读、哪节必须等设备）在 [环境与能力矩阵](00-start/environment.md)。
 
 ~~~powershell
-# 故障注入练习（只需标准 Python）
+# A 档：故障注入练习
 python 09-practice/check.py list
 python 09-practice/check.py show VA01
 python 09-practice/check.py grade VA01
 
-# CPU 教学实验
+# A 档：CPU 教学实验
 python assets/cpu/indexing_lab.py
 python assets/cpu/softmax_lab.py
 python -m unittest discover -s assets/cpu
 
-# 需要 PyTorch
+# B 档：需要 PyTorch
 python 09-practice/operator-stories/operator_story.py --output 09-practice/operator-stories/results/local
 python 09-practice/model-slice/run.py --profile --output 09-practice/model-slice/results/local
 ~~~
@@ -81,18 +125,34 @@ cmake --build build/cuda --config Release
 ctest --test-dir build/cuda -C Release --output-on-failure
 ~~~
 
+## 这个仓库不承诺什么
+
+判断一份材料值不值得读，先看它承认什么。
+
+**验证状态**
+
+- `assets/cuda/` 下的 `.cu` 文件**尚未在真实设备上编译验证**——编写本仓的环境没有 nvcc 和 GPU。源码可读、逻辑可推，但“能在设备上编译通过”这件事没有被验证过。
+- Triton 教学代码按官方接口编写，同样需要在兼容版本和 GPU 上验证。
+- **可以复跑的是这些**：`assets/cpu/` 的 17 项单元测试、故障注入 12 题（39 组输入）、阅读题 15 道、算子故事与模型切片的 CPU 报告。
+
+**内容边界**
+
+- 模拟数据都明确标注为模拟，不代表任何具体硬件的成绩。
+- 模型切片使用随机权重，不是预训练语言模型，也没有手写 GPU FlashAttention；报告里的 SDPA 实际走 CPU 路径（事件名是 `_scaled_dot_product_flash_attention_for_cpu`），不是硬件实现。
+- 算子域按类型覆盖 elementwise、reduction、normalization、matmul、attention、convolution、fusion、数据搬运，**不是全部算子**。loss、optimizer、random、sequence、vision、sparse、通信算子没有内容。
+- 国产加速卡的 API、工具和约束随 SDK/设备变化，以厂商对应版本的官方资料为准。
+
 ## AI 辅助的学习方法
 
-AI 可加快样板代码、改写和测试草稿；学习者仍需检查索引、mask、同步、dtype、数值边界和设备假设，并亲自测量性能。使用 [AI 审查清单](99-reference/checklists/ai-usage-policy.md)，在 [实验记录模板](99-reference/templates/experiment-log-template.md) 中留下假设和证据。不要把 AI 写出的性能数字当成实测。
+AI 能加快样板代码、改写和测试草稿；不能替你判断索引、mask、同步、dtype、数值边界和设备假设，也不能替你测量性能。
 
-## 证据和限制
+用 [AI 审查清单](99-reference/checklists/ai-usage-policy.md) 逐项检查，在 [实验记录模板](99-reference/templates/experiment-log-template.md) 里留下假设和证据。**不要把 AI 写出的性能数字当成实测。**
 
-- 课程中的模拟数据都应明确标注为模拟，不代表具体硬件成绩。
-- CPU 实测报告可复跑；模型切片通过 7 项测试。模型使用随机权重，不是完整预训练语言模型，也没有手写 GPU FlashAttention。
-- CUDA 示例源代码和 CMake 入口已提供，但**本仓当前环境没有 nvcc 和 GPU，`.cu` 文件未经编译验证**。实际编译需在有 CUDA Toolkit 的设备上完成。
-- Triton 教学代码按官方接口编写，需在本机兼容版本和 GPU 上验证。
-- 国产加速卡的 API、工具和约束随 SDK/设备变化；以厂商对应版本的官方资料为准。
+## 下一步
 
-## 外部资料
-
-按主题查看 [外部资料索引](99-reference/external-links.md)：CUDA、Triton、Nsight、PyTorch、CUTLASS 和进阶论文。
+| 你的位置 | 做什么 |
+|---|---|
+| 完全不知道从哪开始 | 跑上面“30 秒起步”的两条命令，然后读一遍[流程主线](01-workflow/README.md)——30 分钟，不要停下来查东西 |
+| 知道要写哪个算子 | [决策树](99-reference/decision-tree.md) |
+| 卡在某个具体问题上 | [术语表](99-reference/glossary.md)、[常见错误](99-reference/common-pitfalls.md) |
+| 想找外部资料 | [外部资料索引](99-reference/external-links.md)：CUDA、Triton、Nsight、PyTorch、CUTLASS 和进阶论文 |
